@@ -1,6 +1,8 @@
 Papers & Books Summary Repository
-=========================================
-# A summary of statistical papers, books, etc.
+===========
 
-# Statistics
- 
+#### Explanation : A summary of statistical papers, books, etc.
+
+*Statistics*
+===
+* 신뢰구간
