@@ -1,2 +1,2 @@
-# Papers_books_summary
-A summary of statistical papers, books, etc.
+# Papers & Books Summary Repository
+  * A summary of statistical papers, books, etc.
