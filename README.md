@@ -64,6 +64,8 @@ Papers & Books Summary Repository
         아마도 3번과 같은 오류는, 귀무가설이 맞다는 전제 하에 모든 일이 이루어진다면 맞는 말이긴 한데, 애초부터 귀무가설이 틀릴 수도 있고, 그렇더라도 p-value는 여전히 구해지기 때문에 뭐라 말할 수 없게 되는 것이다.
         ```
     * 참고 : https://adnoctum.tistory.com/332
+* **딥러닝(Deep Learning)** 과 **머신러닝(Merchine Lerning)**, **인공지능(AI)** 의 구별법
+    * 
 
 *※ 여러가지 용어*
 ===
