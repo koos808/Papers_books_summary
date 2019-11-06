@@ -80,3 +80,4 @@ Papers & Books Summary Repository
 
 * 도움되는 사이트
     * 딥러닝 간단한 설명 : https://yjjo.tistory.com/5
+    * 간단한 딥러닝 연습문제 : https://leechamin.tistory.com/237?category=827905
