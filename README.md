@@ -81,3 +81,10 @@ Papers & Books Summary Repository
 * 도움되는 사이트
     * 딥러닝 간단한 설명 : https://yjjo.tistory.com/5
     * 간단한 딥러닝 연습문제 : https://leechamin.tistory.com/237?category=827905
+
+* 논문
+    * Stock market index prediction using artificial neural network
+        * https://www.sciencedirect.com/science/article/pii/S2077188616300245
+        * https://www.researchgate.net/publication/305746718_Stock_market_index_prediction_using_artificial_neural_network
+    * Batch Normalization
+        * https://arxiv.org/abs/1502.03167
