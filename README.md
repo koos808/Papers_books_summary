@@ -88,3 +88,4 @@ Papers & Books Summary Repository
         * https://www.researchgate.net/publication/305746718_Stock_market_index_prediction_using_artificial_neural_network
     * Batch Normalization
         * https://arxiv.org/abs/1502.03167
+        * https://blog.lunit.io/2018/04/12/group-normalization/
