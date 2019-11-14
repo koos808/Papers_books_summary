@@ -90,3 +90,4 @@ Papers & Books Summary Repository
         * https://arxiv.org/abs/1502.03167
         * https://blog.lunit.io/2018/04/12/group-normalization/
         * https://eccv2018.org/openaccess/content_ECCV_2018/papers/Yuxin_Wu_Group_Normalization_ECCV_2018_paper.pdf
+        * https://blog.airlab.re.kr/2019/08/Group-Normalization
