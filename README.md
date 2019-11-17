@@ -91,3 +91,5 @@ Papers & Books Summary Repository
         * https://blog.lunit.io/2018/04/12/group-normalization/
         * https://eccv2018.org/openaccess/content_ECCV_2018/papers/Yuxin_Wu_Group_Normalization_ECCV_2018_paper.pdf
         * https://blog.airlab.re.kr/2019/08/Group-Normalization
+        * https://shuuki4.wordpress.com/2016/01/13/batch-normalization-%EC%84%A4%EB%AA%85-%EB%B0%8F-%EA%B5%AC%ED%98%84/
+        * http://sanghyukchun.github.io/88/
