@@ -93,3 +93,14 @@ Papers & Books Summary Repository
         * https://blog.airlab.re.kr/2019/08/Group-Normalization
         * https://shuuki4.wordpress.com/2016/01/13/batch-normalization-%EC%84%A4%EB%AA%85-%EB%B0%8F-%EA%B5%AC%ED%98%84/
         * http://sanghyukchun.github.io/88/
+
+* 세미나 논문 읽을 LIST
+    * http://www.materic.or.kr/community/board_anony/content.asp?idx=29&page=1&board_idx=&s_kinds=&s_word=&s_gubun=&listCnt=\
+    * 알파고 논문 관련
+        * https://roundhere.tistory.com/entry/%EC%95%8C%ED%8C%8C%EA%B3%A0
+        * https://wegonnamakeit.tistory.com/17
+        * https://blog.naver.com/sogangori/220668124217
+        * https://www.youtube.com/watch?v=a4H-P10pVz4
+    * Reinforcement Learning 관련
+        * Playing Atari with Deep Reinforcement Learning
+        * https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf
