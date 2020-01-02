@@ -104,3 +104,5 @@ Papers & Books Summary Repository
     * Reinforcement Learning 관련
         * Playing Atari with Deep Reinforcement Learning
         * https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf
+        * https://ddanggle.github.io/demystifyingDL
+
