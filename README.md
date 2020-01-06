@@ -105,4 +105,11 @@ Papers & Books Summary Repository
         * Playing Atari with Deep Reinforcement Learning
         * https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf
         * https://ddanggle.github.io/demystifyingDL
+        * 기초 논문 리스트 
+            * http://www.materic.or.kr/community/board_anony/content.asp?idx=29&page=1&board_idx=&s_kinds=&s_word=&s_gubun=&listCnt=
+
+        * https://www.researchgate.net/publication/318798849_Deep_learning_for_stock_market_prediction_from_financial_news_articles
+        * https://arxiv.org/pdf/1903.06478.pdf
+        * https://arxiv.org/pdf/1909.12227.pdf
+        * https://www.aclweb.org/anthology/U17-1001.pdf
 
