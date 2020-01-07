@@ -77,6 +77,25 @@ Papers & Books Summary Repository
 
     * 장단점
         * 이러한 이유로 이전 학습의 결과가 다음학습에 영향을 주게 되고 부스팅 라운드를 진행할수록 m차원 공간의 분류경계선(Borderline)상의 데이터의 가중치가 증가하게 되는 결과를 가져오게 됩니다. 일반적으로 부스팅 알고리즘은 의사결정나무(Decision Tree)모형을 주로 사용하는 것으로 알려져 있고 과적합(Over fitting)에 강한 장점을 갖고 있습니다. 하지만 다른 앙상블 모형과 마찬가지로 분류결과에 대한 해석이 불가능하다는 단점을 갖고 있습니다.
+</br>
+
+
+*※ 강화학습 관련*
+===
+
+* 마르코프 의사 결정
+    * 마르코프 의사 결정 과정은 다음 상태 의 확률은 오직 현재의 상태 와 현재의 행동 에만 영향을 받고, 이전의 상태와 행동에는 영향을 받지 않는 마르코프 가정을 기반으로 합니다.
+* 차감된 미래의 리워드(Discounted Future Reward)
+    * 
+
+
+
+
+
+</br>
+
+*※ 사이트 및 논문*
+===
 
 * 도움되는 사이트
     * 딥러닝 간단한 설명 : https://yjjo.tistory.com/5
@@ -105,6 +124,7 @@ Papers & Books Summary Repository
         * Playing Atari with Deep Reinforcement Learning
         * https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf
         * https://ddanggle.github.io/demystifyingDL
+        * https://jamiekang.github.io/2017/05/07/playing-atari-with-deep-reinforcement-learning/
         * 기초 논문 리스트 
             * http://www.materic.or.kr/community/board_anony/content.asp?idx=29&page=1&board_idx=&s_kinds=&s_word=&s_gubun=&listCnt=
 
