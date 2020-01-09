@@ -127,7 +127,8 @@ Papers & Books Summary Repository
         * https://jamiekang.github.io/2017/05/07/playing-atari-with-deep-reinforcement-learning/
         * 기초 논문 리스트 
             * http://www.materic.or.kr/community/board_anony/content.asp?idx=29&page=1&board_idx=&s_kinds=&s_word=&s_gubun=&listCnt=
-
+        * 이웅원님의 Fundamental of Reinforcement Learning
+            * https://dnddnjs.gitbooks.io/rl/content/
         * https://www.researchgate.net/publication/318798849_Deep_learning_for_stock_market_prediction_from_financial_news_articles
         * https://arxiv.org/pdf/1903.06478.pdf
         * https://arxiv.org/pdf/1909.12227.pdf
