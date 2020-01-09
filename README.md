@@ -129,6 +129,10 @@ Papers & Books Summary Repository
             * http://www.materic.or.kr/community/board_anony/content.asp?idx=29&page=1&board_idx=&s_kinds=&s_word=&s_gubun=&listCnt=
         * 이웅원님의 Fundamental of Reinforcement Learning
             * https://dnddnjs.gitbooks.io/rl/content/
+            * 연관 사이트
+                * https://www.intel.ai/demystifying-deep-reinforcement-learning/#gs.qrk9c6
+                * https://sumniya.tistory.com/2?category=781573
+                
         * https://www.researchgate.net/publication/318798849_Deep_learning_for_stock_market_prediction_from_financial_news_articles
         * https://arxiv.org/pdf/1903.06478.pdf
         * https://arxiv.org/pdf/1909.12227.pdf
