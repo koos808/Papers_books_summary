@@ -82,3 +82,8 @@
   * Convolutional Layer의 parameter 수 -> 3x3(filter)x64(filter 개수) + 64(bias 개수) = 640
   * Fully Connected Layer의 parameter 수 -> 14x14x64x10(output)+10(bias 개수) = 125,440
   * Convolutional Layer의 parameter 수보다 Fully Connected Layer를 정의할 때 필요한 parameter 수가 훨씬 많다. 파라미터의 수가 많아지면 안좋으므로 앞단에 Convolution Layer를 많이 붙히고 Fully Connected Layer를 간소화 시키던가, 없애던가해서 네트워크 전체를 정의하는 파라미터의 수를 줄이려고하는게 요즘 뉴럴렛의 트렌드임.
+* Epoch / Batch size Iteration
+  * One epoch : one forward and backward pass of `all training data` 
+  * Batch size : the number of training examples in `one forward and backward pass` 
+  * One iteration : number of passes
+  * If we have 55,000 training data, and the batch size is 1,000. Then, we need 55 iterations to complete 1 epoch.
