@@ -132,7 +132,9 @@ Papers & Books Summary Repository
             * 연관 사이트
                 * https://www.intel.ai/demystifying-deep-reinforcement-learning/#gs.qrk9c6
                 * https://sumniya.tistory.com/2?category=781573
-                
+        *  Sutton의 Introduction to Reinforcement Learning
+           *  책 : http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html
+           *  강의 : https://www.youtube.com/watch?v=2pWv7GOvuf0
         * https://www.researchgate.net/publication/318798849_Deep_learning_for_stock_market_prediction_from_financial_news_articles
         * https://arxiv.org/pdf/1903.06478.pdf
         * https://arxiv.org/pdf/1909.12227.pdf
