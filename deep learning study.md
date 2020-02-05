@@ -101,3 +101,46 @@
   * Batch size : the number of training examples in `one forward and backward pass` 
   * One iteration : number of passes
   * If we have 55,000 training data, and the batch size is 1,000. Then, we need 55 iterations to complete 1 epoch.
+
+## *※ STEP 2 : 4가지 CNN 살펴보기: AlexNET, VGG, GoogLeNet, ResNet*
+* 핵심 키워드
+    * 
+    ```
+    CNN(Convolutional Neural Network)
+    Conv2D
+    AlexNet
+    VGG
+    GoogLeNet
+    ResNet
+    ```
+* Layer를 Deep하게 쌓으면서 동시에 성능을 잘 나오게 하기 위한 테크닉들이다.
+* AlexNet(ILSVRC 2012 1등)
+    * What is the number of parameters? 
+        * parameter의 수 : 11x11x3x48+48(channel)
+    * Why are layers divided into two parts?
+        * Gpu의 낮은 성능 때문!
+    * Relu 사용
+    * LRN(Local Response Normalization) 사용
+        * regulization 테크닉 중 하나이다. Out put으로 나온 convolutional feature map 중에서 일정 부분만 높게 activation한다. 즉, convolution feature map 중에서 일정 부분만 높은 값을 갖고 나머지는 낮은 값을 갖도록 만드는 역할을 한다.
+        * It implements a form of `lateral inhibition(측면 억제)` insppired by real neurons.
+    * Regularization in AlexNet
+        * Main objective is to reduce `overfitting`.
+        * More details will be handled in next week.
+        * In the `AlexNet`, two regularization methods are used.
+            * `Data augmentation` : data를 늘리는 것. Flip augmentation(물체 좌우반전) & Crop(이미지 부분으로 나누기) + Flip augmentation. 하지만, 숫자와 같은 이미지들은 Flip augmentation을 하면 안되므로 하려는 이미지를 파악하고 Data augmentation을 적용해야한다.
+                * Original Image(256x256) -> Smaller Patch(224x224) : This increases the size of the training set by a `factor of 2048(32x32x2(좌우반전))`. Two comes from horizontal reflections. 즉, 데이터를 뻥튀기 시켜서 학습을 시켰기 때문에 성능이 좋아졌다고 얘기했음.
+                * Original Patch(224x224) -> Altered Patch(224x224) : 또한, `Color variation`을 적용했다. `Color variation`이란 것은 다음과 같다. RGB Image이기 때문에 그냥 Noise 성능이 아니라, 각각의 RGB Channel에 어떤 특정값을 더하게 된다. 더하는 특정값이란 것은 학습데이터에서 해당 RGB가 얼마나 많이 변했는지를 학습을 통해 알아내고 이 값에 비례해서 RGB 값을 넣게 된다. 예를 들어서 `Data augmentation`을 할 때, 빨간색에 Noise를 많이 넣게 되면 전혀 다른 라벨의 데이터가 나오기 때문에 학습데이터에서 허용할 수 있는 만큼의 noise만 넣어야 한다.
+                * Probabilistically, not a single patch will be same at the training phase! (a `factor of infinity!`)
+            * `Dropout` : 일반적인 Dropout은 해당 Layer에서 일정 퍼센트만큼의 노드를 0으로 만들어 준다. 하지만 여기서는 단지 output에 0.5만큼을 더했다. <- 이렇게 쓴거는 AlexNet 논문이 처음이자 마지막이다.
+                * Original dropout sets the output of each hidden neuron with certain probability.
+                * In this paper, they simply multiply the outputs by 0.5.
+* VGG 
+    * 매우 간단하다. Convolution은 모두 stride를 1로, 3x3을 Convolution에 활용했다.
+    * Convolution은 3x3을 활용했으며, stride는 1로 하며, max pooling과 average pooling을 통해서 space한 정보를 줄이게 된다.
+* GoogLeNet(ILSVRC 2014 1등)
+    * 22 Layers Deep Network
+    * Efficiently utilized computing resources, `Inception Module` : `Inception Module`을 알면 GoogLeNet을 다 이해한 것이다!
+    * Significantly outperforms previous methods on ILSVRC 2014
+    * `Inception Module`이란? 
+        * 
+            
