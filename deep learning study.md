@@ -35,3 +35,17 @@
     * 29. Uncertainty in Neural Networks
 
 ## *※ STEP 1 : Convolutional Neural Network(CNN)의 기초*
+* 핵심 키워드
+    * 
+    ```
+    Convolutional Neural Network (CNN)
+    Convolutions
+    Subsampling
+    Convolutin layer
+    Fully connected layer
+    ```
+* CNN :: Convolutional Neural Network
+* 절차
+    * Input -> (Convolutions) -> Convolution feature maps -> (Subsampling) -> (Convolutions) -> (Subsampling) -> ... -> Full Connection(= Dense Layer = Fully Connected Layer)
+    * Subsampling : 이미지 안에서 더 작은 영역을 얻는 작업(이미지 축소 및 빈공간 줄이기)
+    * CNN = Convolution + Subsampling + Full Connection
