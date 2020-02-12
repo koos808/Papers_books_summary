@@ -180,3 +180,44 @@
         * 40개 정도의 Layer에서 생겼던 Degradation 문제를 100단 정도의 Layer에서 Degradation 문제가 발생하도록 밀었다고 볼 수 있음. 하지만 여전히 Layer 개수가 1000개가 넘어가면 Degradation 문제가 발생한다.
     * 
     
+## *※ STEP 3 : Overfitting을 막는 regularization*
+* 핵심 키워드
+    * 
+    ```
+    Regularization
+    Overfitting
+    ```
+* Regularization Main purpose is to avoid `OverFitting`.
+    * Overfitting이란 것은 학습데이터를 너무 믿는 나머지 테스트 데이터를 잘 맞추지 못하는 것을 의미함.
+    * OverFitting
+        * Literally, Fitting the data more than is warranted.
+        * Things get worse with `noise!`
+    * Noise 
+        * Stochastic Noise ::: Comes form `random measurement error`(관측 에러)
+        * Deterministic Noise ::: `Cannot model` this type of error -> 이런 에러는 모델링 할 수 없다.
+        * Noise에는 위 두개의 Noise가 섞여있기 때문에 완벽히 decomposition할 수 없다.
+        * mathematically
+            * `VC dimension` - complexity of the algorithm(ex. 뉴럴렛의 Layer 수)
+            * in-sample error - Training error
+            * out-of-sample error - Test error
+            * in-sample error와 out-of-sample error의 차이를 보편적으로  `Generalization performance`라고 함. `Generalization performance`가 높아지는게 진짜 제일 중요하다!!
+            * `Generalization error`가 커지면 Over fitting이 나오게 되는 것임. 즉, VC dimension이 커지면(뉴럴렛을 복잡하게 할 수록) overfitting이 나올 확률이 커지게 된다.
+    * Preventing OverFitting?
+        * **Approach 1** : Get `more` data - 가장 중요!! 데이터가 부족하다면 data agumentation을 활용해 데이터를 뻥튀기 시켜야 한다.
+        * **Approach 2** : Use a model with the right `capacity` - 적절한 능력을 갖는 모델을 활용해야 한다.
+        * **Approach 3** : `Average` many different models (Ensemble) - 앙상블을 활용하는 것! 이게 바로 Bagging임. 앙상블을 사용하면 일반적으로 성능이 1~2%정도 향상된다.
+        * **Approach 4** : Use DropOut, DropConnect, or BatchNorm - 위 3개를 해보고나서 테크닉(technique)들이 들어가게 된다.
+    * Limiting the Capacity
+        * Capacity를 줄인다는 것은 결국 네트워크 사이즈를 줄이는 것도 있지만 `Early stopping`도 Capacity에 속한다.
+        * `Architecture` : Liit the number of hidden layers and units per layer
+        * `Early stopping` : Stop the learning before it overfits using validation sets
+        * `Weight-decay` : Penalize large weights using penalties or constraints on their squared values (L2 penalty) or absolute values (L1 penalty) - 학습하는 파라미터를 너무 크게 설정하고 싶지 않은 것! Weight가 너무 커지는 것을 방지하는 것을 추가함.
+    * DropOut
+        * DropOut increases the generalization performance of the neural network by `restricting` the model capacity! - 한 Layer가 있을 때 그 Layer의 노드를 랜덤으로 몇개 꺼버리는 것(학습 할 때만).
+
+
+
+
+
+
+
