@@ -151,7 +151,7 @@
         * `Inception Module`의 또 다른 차별점은 여러개로의 갈림길이 있기 때문에 더 다양한 정보들에서 추출할 수 있음.
         * 즉, GoogLeNet은 `Inception Module`과 `one by one convolution`을 가지고 Network를 만들었으며, 이를 통해 더욱 Deep한 Network를 만들 수 있으면서도 성능을 올릴 수 있었다.
         * GoogLeNet이 VGG보다 DEEP하면서도 파라미터 수가 절반 이상 적다.
-        * 서로 다른 receptive field를 만들기 위해서 Image를 바로 convolutions을 하는게 아니라 1x1 convolutions, 3x3 convolutions, 5x5 convolutions로 각각 해보고 그것들을 concatenation한다. 그렇게 concatenation convolution feature map 위에 다시 1x1 convolutions, 3x3 convolutions, average pooling 등을 해주며 다시 `concatenation`한다. 이런식을 계속 반복하면서 output단의 input image 밑의 receptive field를 굉장히 다양하게 만들어 준다. 또한 `one by one convolution`을 통해서 `channel dimmension reduction`을 해주면서 Layer를 정의하기에 필요한 파라미터의 수를 줄인 것이 GoogLeNet 논문의 핵심이다.
+        * 서로 다른 `receptive field`를 만들기 위해서 Image를 바로 convolutions을 하는게 아니라 1x1 convolutions, 3x3 convolutions, 5x5 convolutions로 각각 해보고 그것들을 concatenation한다. 그렇게 concatenation convolution feature map 위에 다시 1x1 convolutions, 3x3 convolutions, average pooling 등을 해주며 다시 `concatenation`한다. 이런식을 계속 반복하면서 output단의 input image 밑의 `receptive field`를 굉장히 다양하게 만들어 준다. 또한 `one by one convolution`을 통해서 `channel dimmension reduction`을 해주면서 Layer를 정의하기에 필요한 파라미터의 수를 줄인 것이 GoogLeNet 논문의 핵심이다.
 * Inception v4
     * 최근에 파라미터를 줄이기 위해서 어디까지 노력했냐의 산물
     * `Inception v4` model에서는 `Inception Module`에서 나오는 5x5 같은 convolutions이 더이상 나오지 않는다. receptive field를 늘리는 입장에서는 3x3 convolutions을 두번하던가 5x5 convolutions을 한번 하는 것과 동일하다.
@@ -176,5 +176,7 @@
     * ResNet의 가장 큰 단점은 same dimension.
     * Deeper bottle architecture
         * `Inception Module`에서 `one by one convolution`을 사용해서 파라미터를 줄이고 줄어든 파라미터를 가지고 convolution을 한뒤 concatenation 해주었다. ResNet도 비슷하게  `one by one convolution`으로 채널을 줄이고 convolution을 한뒤 `one by one convolution`을 다시 해준다(`차이점`). 즉, ResNet은 <u>Input(256 dimension) -> Dimension reduction(1x1,64) -> Convolution(3x3,64) -> Dimension increasemnet(1x1, 256)</u> 순으로 해주는데, 왜 마지막에 `one by one convolution`을 다시 해줬냐면 입력을 출력에 더해주기위해(same dimension 때문에) 다시 256채널로 복원해야 했기 때문이다. 즉 Dimension increasement가 Inception module과의 차이점이며 `Deeper bottle architecture`라고 한다.
+    * ResNet 논문의 의의
+        * 40개 정도의 Layer에서 생겼던 Degradation 문제를 100단 정도의 Layer에서 Degradation 문제가 발생하도록 밀었다고 볼 수 있음. 하지만 여전히 Layer 개수가 1000개가 넘어가면 Degradation 문제가 발생한다.
     * 
     
