@@ -119,7 +119,7 @@
         * parameter의 수 : 11x11x3x48+48(channel)
     * Why are layers divided into two parts?
         * Gpu의 낮은 성능 때문!
-    * Relu 사용
+    * `Relu 사용`
     * LRN(Local Response Normalization) 사용
         * regulization 테크닉 중 하나이다. Out put으로 나온 convolutional feature map 중에서 일정 부분만 높게 activation한다. 즉, convolution feature map 중에서 일정 부분만 높은 값을 갖고 나머지는 낮은 값을 갖도록 만드는 역할을 한다.
         * It implements a form of `lateral inhibition(측면 억제)` insppired by real neurons.
@@ -142,5 +142,39 @@
     * Efficiently utilized computing resources, `Inception Module` : `Inception Module`을 알면 GoogLeNet을 다 이해한 것이다!
     * Significantly outperforms previous methods on ILSVRC 2014
     * `Inception Module`이란? 
-        * 
-            
+        * AlexNet처럼 동일한 모양의 네트워크가 갈라진게 아니라, 1x1 convolutions, 3x3 convolutions, 5x5 convolutions 등의 다른 역할을 하는 convolutions들을 filter concatenation을 하여 방향순으로 쌓임.
+        * filter concatenation이란 것은 Filter를 채널 방향으로 더한 것임.
+        * `one by one convolution`을 추가함으로써 channel의 수를 중간에 한번 줄이고 이 네트워크를 정의하는 파라미터의 수를 줄일 수 있다. 즉, Layer가 한번 더 추가했는데도 파라미터의 수가 줄어든다.
+    * GoogLeNet은 `Inception Module`이 반복된 구조로 이루어져 있음. 1x1 convolution을 통해서 채널을 줄임으로써 전체 파라미터 수를 줄였음.
+    * Conclusion
+        * Very Clever idea of using `one by one convolution` for `dimmension reduction`!
+        * `Inception Module`의 또 다른 차별점은 여러개로의 갈림길이 있기 때문에 더 다양한 정보들에서 추출할 수 있음.
+        * 즉, GoogLeNet은 `Inception Module`과 `one by one convolution`을 가지고 Network를 만들었으며, 이를 통해 더욱 Deep한 Network를 만들 수 있으면서도 성능을 올릴 수 있었다.
+        * GoogLeNet이 VGG보다 DEEP하면서도 파라미터 수가 절반 이상 적다.
+        * 서로 다른 receptive field를 만들기 위해서 Image를 바로 convolutions을 하는게 아니라 1x1 convolutions, 3x3 convolutions, 5x5 convolutions로 각각 해보고 그것들을 concatenation한다. 그렇게 concatenation convolution feature map 위에 다시 1x1 convolutions, 3x3 convolutions, average pooling 등을 해주며 다시 `concatenation`한다. 이런식을 계속 반복하면서 output단의 input image 밑의 receptive field를 굉장히 다양하게 만들어 준다. 또한 `one by one convolution`을 통해서 `channel dimmension reduction`을 해주면서 Layer를 정의하기에 필요한 파라미터의 수를 줄인 것이 GoogLeNet 논문의 핵심이다.
+* Inception v4
+    * 최근에 파라미터를 줄이기 위해서 어디까지 노력했냐의 산물
+    * `Inception v4` model에서는 `Inception Module`에서 나오는 5x5 같은 convolutions이 더이상 나오지 않는다. receptive field를 늘리는 입장에서는 3x3 convolutions을 두번하던가 5x5 convolutions을 한번 하는 것과 동일하다.
+    * 왜 잘되는 지는 알 수 없음.
+* ResNet
+    * 역시나 파라미터를 줄이기 위해 `BottleNeck architecture`를 사용했으며 `residual connection`이란 것을 사용했다.
+    * ResNet 논문에서는 152 Layers Network로 구성되어 있다. 또한 동일한 Network가 여러 가지 대회에서 1등을 했다는 것은 이 방법론이 굉장히 범용적이며 다양한 곳에 활용될 수 있다는 의의를 주었다. 즉, 기존 코드에 `residual connection`이란 것을 추가하면 성능이 향상되는 의의가 있다.
+    * 논문에서의 문제 제기
+        * Is deeper Network always better?(Deep한 Network가 항상 좋나?)
+        * What about vanishing/exploding gradients?
+            * -> Better initialization methods/batch normalization/ReLU 때문에 vanishing/exploding gradients 문제가 상대적으로 덜 중요해 졌다.
+        * Any other problems?
+            * Overfitting?
+            * No -> `Degradation problem` : more depth but lower performance.
+            * Overfitting과 Degradation의 차이점 : trainning error가 낮아지고 accuracy가 높아질 때, test accuracy가 계속 떨어질 때 Overfitting이라고 한다. 즉 Overfitting의 정의는 trainning data를 너무 잘 맞추려고 한 나머지 test data를 못맞추게 되는 것을 의미한다. Degradation은 무엇이냐면 trainning과 test data에서 잘되는데 성능이 잘 안나오는 것을 의미한다. 
+    * Degradation problem을 해결하기 위해 Residual learning building block이란 것을 만들었음. 아이디어는 매우 간단함. 입력이 들어오고 출력이 있을 때 입력을 출력에 더한다. 이 때의 유일한 제약조건은 입력과 출력의 dimension이 같아야 하는 것이다. 어떤 target과 현재 입력사이의 차이만 학습을 하겠다는 것이 `Residual learning building block`이라 한다.
+    * Why residual? (Residual이 왜 좋냐)   
+        * We `hypothesize` that it is easier to optimize the residual mapping than to optimize the original, unreferenced mapping. - residual mapping을 사용하면 더 좋을 것이라고 가정을 해봤는데 적용도 쉽고 실제로 잘 되더라~. 수학적인 background에서 나온 것이 아니라..
+        * `Shortcut connections` are used.
+        * "The extremely deep residual nets are `easy` to optimize." -> **easy**
+        * "The deep residual nets can **easily** enjoy accuracy gains from greatly increased depth, producing results substantially better than previous networks."
+    * ResNet의 가장 큰 단점은 same dimension.
+    * Deeper bottle architecture
+        * `Inception Module`에서 `one by one convolution`을 사용해서 파라미터를 줄이고 줄어든 파라미터를 가지고 convolution을 한뒤 concatenation 해주었다. ResNet도 비슷하게  `one by one convolution`으로 채널을 줄이고 convolution을 한뒤 `one by one convolution`을 다시 해준다(`차이점`). 즉, ResNet은 <u>Input(256 dimension) -> Dimension reduction(1x1,64) -> Convolution(3x3,64) -> Dimension increasemnet(1x1, 256)</u> 순으로 해주는데, 왜 마지막에 `one by one convolution`을 다시 해줬냐면 입력을 출력에 더해주기위해(same dimension 때문에) 다시 256채널로 복원해야 했기 때문이다. 즉 Dimension increasement가 Inception module과의 차이점이며 `Deeper bottle architecture`라고 한다.
+    * 
+    
