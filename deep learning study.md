@@ -213,10 +213,38 @@
         * `Early stopping` : Stop the learning before it overfits using validation sets
         * `Weight-decay` : Penalize large weights using penalties or constraints on their squared values (L2 penalty) or absolute values (L1 penalty) - 학습하는 파라미터를 너무 크게 설정하고 싶지 않은 것! Weight가 너무 커지는 것을 방지하는 것을 추가함.
     * DropOut
-        * DropOut increases the generalization performance of the neural network by `restricting` the model capacity! - 한 Layer가 있을 때 그 Layer의 노드를 랜덤으로 몇개 꺼버리는 것(학습 할 때만).
-
-
-
+        * DropOut increases the generalization performance of the neural network by `restricting` the model capacity! - 한 Layer가 있을 때 그 Layer의 노드를 랜덤으로 몇개 꺼버리는 것(학습 할 때만 0으로 만들기, 테스트할 때는 모두 사용).
+    * DropConnect
+        * Instead of turning the neurons off (DropOut), DropConnect `disconnects` the connections between neurons. - Layer의 값을 0으로 만드는 것이 아니라 weight를 끊어버리는 것임(0으로 주는 것).
+    * Batch Normalization(중요!) -> 왠만한 문제에서 가능한 다 사용하면 됨.
+        * mini-batch learning을 할 때, batch마다 normalization을 해서 statics들을 맞추는 작업을 해주는 것.
+        * Benefits of BN
+            * 1. Increase learning rate(learning rate를 늘릴 수 있다.) - Interval covariate shift를 줄일 수 있다. dataset들 간의 다른 statistics 때문에 일반적으로 learning rate가 너무 크면 학습이 되지 않는다. 하지만, Batch Normalization은 이러한 문제를 정규화시키기 때문에 learning rate를 높여서 학습할 수 있다.
+            * 2. Remove Dropout - Dropout을 안써도 된다.
+            * 3. Reduce L2 weight decay - L2 weight decay를 안써도 된다.
+            * 4. Accelerate leaning rate decay - learning rate를 빨리해도 학습이 잘된다.
+            * 5. Remove Local Response Normalization - Local Response Normalization를 안써도 된다.
+    * Conclusion
+        * 어떤 문제를 풀던 간에 Overfitting은 발생하기 때문에 Regularization은 항상 고려해야 한다. 아래는 순서.
+        * 1.`data argumentation` -> data 늘리기
+        * 2.`Layer Size`를 늘려가면서 학습해보기 & 데이터가 적을때는 적당한 `Network architecture`를 잡는게 진짜 중요하다.
+* Book review - Ian Goodfellow's books - `http://www.deeplearningbook.org/` ::: Regularization chapter 7
+    * List
+    ```
+    1. Parameter Norm Penalties
+    2. Dataset Augmentation
+    3. Noise Robustness : to input, weights, and output
+    4. Semi-Supervised Learning = learning a "representation"
+    5. Multitask learning
+    6. Early Stopping
+    7. Parameter Tying and Parameter Sharing
+    8. Sparse representation
+    9. Bagging and Other Ensemble Methods
+    10. Dropout
+    11. Adversarial Training
+    ```
+    * Parameter Norm Penalties
+        * Many regularization approaches are based on limiting the `capacity` of models by adding a parameter norm penalty to the objective function.
 
 
 
