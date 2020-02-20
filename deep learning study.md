@@ -137,6 +137,8 @@
 * VGG 
     * 매우 간단하다. Convolution은 모두 stride를 1로, 3x3을 Convolution에 활용했다.
     * Convolution은 3x3을 활용했으며, stride는 1로 하며, max pooling과 average pooling을 통해서 space한 정보를 줄이게 된다.
+    * 3,1,1(feature map size 유지)로 모든 Layer를 만들고, Block이란 개념을 도입함.
+    * Block을 사용해서 vanishing gradient 문제를 피할 수 가 있었음. end-to-end가 아니라서 부분 부분 좋은것들만 찾아서 합쳤기 때문. 
 * GoogLeNet(ILSVRC 2014 1등)
     * 22 Layers Deep Network
     * Efficiently utilized computing resources, `Inception Module` : `Inception Module`을 알면 GoogLeNet을 다 이해한 것이다!
@@ -144,7 +146,8 @@
     * `Inception Module`이란? 
         * AlexNet처럼 동일한 모양의 네트워크가 갈라진게 아니라, 1x1 convolutions, 3x3 convolutions, 5x5 convolutions 등의 다른 역할을 하는 convolutions들을 filter concatenation을 하여 방향순으로 쌓임.
         * filter concatenation이란 것은 Filter를 채널 방향으로 더한 것임.
-        * `one by one convolution`을 추가함으로써 channel의 수를 중간에 한번 줄이고 이 네트워크를 정의하는 파라미터의 수를 줄일 수 있다. 즉, Layer가 한번 더 추가했는데도 파라미터의 수가 줄어든다.
+        * `one by one convolution`을 추가함으로써 channel의 수를 중간에 한번 줄이고 이 네트워크를 정의하는 파라미터의 수를 줄일 수 있다. 즉, Layer가 한번 더 추가했는데도 파라미터의 수가 줄어든다. 정보를 축약도 하면서 파라미터 수를 줄인다.
+        * 5x5로 보는 이유는 처음 학습할 때 크게 크게 보기 위해서임. base가 되는 것을 찾기 위해.
     * GoogLeNet은 `Inception Module`이 반복된 구조로 이루어져 있음. 1x1 convolution을 통해서 채널을 줄임으로써 전체 파라미터 수를 줄였음.
     * Conclusion
         * Very Clever idea of using `one by one convolution` for `dimmension reduction`!
@@ -152,6 +155,9 @@
         * 즉, GoogLeNet은 `Inception Module`과 `one by one convolution`을 가지고 Network를 만들었으며, 이를 통해 더욱 Deep한 Network를 만들 수 있으면서도 성능을 올릴 수 있었다.
         * GoogLeNet이 VGG보다 DEEP하면서도 파라미터 수가 절반 이상 적다.
         * 서로 다른 `receptive field`를 만들기 위해서 Image를 바로 convolutions을 하는게 아니라 1x1 convolutions, 3x3 convolutions, 5x5 convolutions로 각각 해보고 그것들을 concatenation한다. 그렇게 concatenation convolution feature map 위에 다시 1x1 convolutions, 3x3 convolutions, average pooling 등을 해주며 다시 `concatenation`한다. 이런식을 계속 반복하면서 output단의 input image 밑의 `receptive field`를 굉장히 다양하게 만들어 준다. 또한 `one by one convolution`을 통해서 `channel dimmension reduction`을 해주면서 Layer를 정의하기에 필요한 파라미터의 수를 줄인 것이 GoogLeNet 논문의 핵심이다.
+        * inception module과 보조 classifier가 GoogLeNet이 한 일임.
+        * 보조 classifier를 사용해서 vanishing gradinent가 발생해도 아래까지 weight가 업데이트 될 수 있도록 만들었음. 즉, signal이 아래까지 갈 수 있도록 만들었음.
+        * 1x1 conv, 3x3 conv, 5x5 conv 다해보고나서 채널적으로 중복된 정보가 많기 때문에 중복 정보를 줄이기 위해 1x1 filter를 사용한다(액기스만 가져온다). -> conv 하고 싶은거 다하고, 나중에 좋은거 선택하는 방식으로 했음.
 * Inception v4
     * 최근에 파라미터를 줄이기 위해서 어디까지 노력했냐의 산물
     * `Inception v4` model에서는 `Inception Module`에서 나오는 5x5 같은 convolutions이 더이상 나오지 않는다. receptive field를 늘리는 입장에서는 3x3 convolutions을 두번하던가 5x5 convolutions을 한번 하는 것과 동일하다.
@@ -159,6 +165,7 @@
 * ResNet
     * 역시나 파라미터를 줄이기 위해 `BottleNeck architecture`를 사용했으며 `residual connection`이란 것을 사용했다.
     * ResNet 논문에서는 152 Layers Network로 구성되어 있다. 또한 동일한 Network가 여러 가지 대회에서 1등을 했다는 것은 이 방법론이 굉장히 범용적이며 다양한 곳에 활용될 수 있다는 의의를 주었다. 즉, 기존 코드에 `residual connection`이란 것을 추가하면 성능이 향상되는 의의가 있다.
+    * 152 Layer 이상 되면 그게 그거일 것이다~~. 흔들리는 것만 잡자.
     * 논문에서의 문제 제기
         * Is deeper Network always better?(Deep한 Network가 항상 좋나?)
         * What about vanishing/exploding gradients?
@@ -178,8 +185,9 @@
         * `Inception Module`에서 `one by one convolution`을 사용해서 파라미터를 줄이고 줄어든 파라미터를 가지고 convolution을 한뒤 concatenation 해주었다. ResNet도 비슷하게  `one by one convolution`으로 채널을 줄이고 convolution을 한뒤 `one by one convolution`을 다시 해준다(`차이점`). 즉, ResNet은 <u>Input(256 dimension) -> Dimension reduction(1x1,64) -> Convolution(3x3,64) -> Dimension increasemnet(1x1, 256)</u> 순으로 해주는데, 왜 마지막에 `one by one convolution`을 다시 해줬냐면 입력을 출력에 더해주기위해(same dimension 때문에) 다시 256채널로 복원해야 했기 때문이다. 즉 Dimension increasement가 Inception module과의 차이점이며 `Deeper bottle architecture`라고 한다.
     * ResNet 논문의 의의
         * 40개 정도의 Layer에서 생겼던 Degradation 문제를 100단 정도의 Layer에서 Degradation 문제가 발생하도록 밀었다고 볼 수 있음. 하지만 여전히 Layer 개수가 1000개가 넘어가면 Degradation 문제가 발생한다.
-    * 
-    
+    * 객체 검출에서도 많이 사용함.
+* ResNext
+* PolyNet
 ## *※ STEP 3 : Overfitting을 막는 regularization*
 * 핵심 키워드
     * 
@@ -214,6 +222,7 @@
         * `Weight-decay` : Penalize large weights using penalties or constraints on their squared values (L2 penalty) or absolute values (L1 penalty) - 학습하는 파라미터를 너무 크게 설정하고 싶지 않은 것! Weight가 너무 커지는 것을 방지하는 것을 추가함.
     * DropOut
         * DropOut increases the generalization performance of the neural network by `restricting` the model capacity! - 한 Layer가 있을 때 그 Layer의 노드를 랜덤으로 몇개 꺼버리는 것(학습 할 때만 0으로 만들기, 테스트할 때는 모두 사용).
+        * 장점은 매번 mini batch마다 다른 아키텍쳐를 학습하는 효과가 있음.
     * DropConnect
         * Instead of turning the neurons off (DropOut), DropConnect `disconnects` the connections between neurons. - Layer의 값을 0으로 만드는 것이 아니라 weight를 끊어버리는 것임(0으로 주는 것).
     * Batch Normalization(중요!) -> 왠만한 문제에서 가능한 다 사용하면 됨.
