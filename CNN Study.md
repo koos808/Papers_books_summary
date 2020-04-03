@@ -24,8 +24,8 @@ Non-Maximum Supperssion, IoU(Intersection over Union) => 기준 0.5, Bounding Bo
 <br/>
 
 * R-CNN의 전반적인 흐름
-    * ![](./image/R-CNN의_전반적인_흐름.png)
-    * ![](./image/R-CNN의_전반적인_흐름2.png)
+    * ![흐름1](./image/R-CNN의_전반적인_흐름.png)
+    * ![흐름2](./image/R-CNN의_전반적인_흐름2.png)
 
 
 
@@ -52,7 +52,7 @@ Non-Maximum Supperssion, IoU(Intersection over Union) => 기준 0.5, Bounding Bo
 
 ### 중요 Key Point
 * 1.`Region Proposal`
-    * ![](./image/Selective_Search.png)
+    * ![Selective Search](./image/Selective_Search.png)
 
     * 주어진 이미지에서 물체가 있을법한 위치를 찾는 것
     * 카테고리 독립적인 region proposal을 생성하기 위한 방법은 여러가지가 있는데 해당 논문에서는 이전 detection 작업들과 비교하기 위하여 Selective Search라는 최적의 region proposal를 제안하는 기법을 사용하여 독립적인 region proposal을 추출하였다.
@@ -85,11 +85,11 @@ Non-Maximum Supperssion, IoU(Intersection over Union) => 기준 0.5, Bounding Bo
     * 주어진 벡터를 놓고 이것이 해당 물체가 맞는지 아닌지를 구별하는 Classifier 모델을 학습시킵니다. 그런데 왜 CNN Classifier를 놔두고 SVM을 사용할까? -> 저자의 답변 : "그냥 CNN Classifier를 쓰는 것이 SVM을 썼을 때 보다 mAP 성능이 4%가 낮아졌다. 이는 아마도 fine tuning 과정에서 물체의 위치 정보가 유실되고 무작위로 추출된 샘플을 학습하여 발생한 것으로 보입니다."
     * 이후 R-CNN 에서는 SVM을 붙혀서 학습시키는 기법이 더 이상 사용되지 않는다.
 * 4.`NMS(Non-Maximum Suppression)`
-    * ![](./image/Non-Maximum-Suppression.png)
+    * ![NMS](./image/Non-Maximum-Suppression.png)
     * Classification 단계에서 SVM을 통과하여 `각각 박스들은 어떤 물체일 확률 값(Score)`을 가지게 되었습니다. -> 여기서 의문점 : `2천개 박스가 모두 필요한 것인가?` -> 물론 `NO NO`
     * 동일한 물체에 여러 개 박스가 쳐져 있다면, 가장 스코어가 높은 박스만 남기고 나머지는 제거하고, 이 과정을 Non-Maximum Suppression이라 합니다.
     * 이 때 서로 다른 두 박스가 동일한 물체에 쳐져 있다고 `어떻게 판별`할 수 있을까요? -> 여기서 `IoU(Intersection over Union) 개념`이 적용됩니다. 쉽게 말하면 두 박스의 `Area of Overlap(교집합)/Area of Union(합집합) 값`을 의미하며 두 박스가 일치할 수록 1에 가까운 값에 나오게 됩니다.
-    * ![](./image/IoU.png)
+    * ![IoU](./image/IoU.png)
     * 논문에서는 Iou가 `0.5보다 크면` 동일한 물체를 대상으로 한 박스로 판단하고 Non-Maximum Suppression을 적용합니다.
 * 5.`Bounding Box Regression`
     * 위의 단계를 거치며 물체가 있을 법한 위치를 찾고, 해당 물체의 종류를 판별할 수 있는 Classification Model을 학습시켰습니다. 하지만 위의 단계까지만 거치면 Selective Search를 통해서 찾은 박스 위치는 상당히 부정확하게 됩니다.
@@ -140,7 +140,7 @@ Non-Maximum Supperssion, IoU(Intersection over Union) => 기준 0.5, Bounding Bo
 ```
 입력 이미지의 크기나 비율에 관계 없이 CNN을 학습 시킬 수는 없을까? 
 ```
-![](./image/SPPNet_핵심_아이디어.png)
+![SPPNet](./image/SPPNet_핵심_아이디어.png)
 
 Convolution 필터들은 사실 입력 이미지가 고정될 필요가 없습니다. sliding window 방식으로 작동하기 때문에, 입력 이미지의 크기나 비율에 관계 없이 작동합니다. `입력 이미지 크기의 고정이 필요한 이유는 바로 컨볼루션 레이어들 다음에 이어지는 fully connected layer가 고정된 크기의 입력을 받기 때문입니다.` 여기서 Spatial Pyramid Pooling(이하 SPP)이 제안됩니다.
 
@@ -165,7 +165,7 @@ FC layer 통과 전에 피쳐 맵들을 동일한 크기로 조절해주는 pool
     * Spatial Pyramid Pooling을 통해서 각기 크기가 다른 CNN 피쳐맵 인풋으로부터 고정된 크기의 feature vector를 뽑아내는 것에 있다. 그 이후의 접근 방식은 R-CNN과 거의 동일다.
 
 * `SPP(Spatial Pyramid Pooling)` - 공간 피라미드 풀링
-    * ![](./image/Spatial_Pyramid_Pooling.png)
+    * ![Spatial_Pyramid_Pooling](./image/Spatial_Pyramid_Pooling.png)
     * Conv Layer를 거쳐 추출된 feature map을 Input으로 받고 이를 미리 정해져 있는 영역으로 나누어 줍니다. 예를 들어 4x4(16), 2x2(4), 1x1(1) 세가지 영역이 있는데 각각을 하나의 피라미드라고 칭합니다. 즉, 3개의 피라미드를 설정한 것이며 피라미드 한 칸을 bin이라고 합니다. 예를 들어 입력이 64 x 64 x 256 크기의 피쳐 맵이 들어온다고 했을 때, 4x4의 피라미드의 bin의 크기는 16x16이 됩니다.
     * 이제 각 bin에서 가장 큰 값만 추출하는 max pooling을 수행하고, 그 결과를 쭉 이어붙여 줍니다. 입력 피쳐맵의 체널 크기를 k, bin의 개수를 M이라고 했을 때 `SPP의 최종 아웃풋은 kM 차원의 벡터`입니다. 위의 예시에서 k = 256, M = (16 + 4 + 1) = 21 이 됩니다.
     * `정리해보면 입력 이미지의 크기와는 상관없이 미리 설정한 bin의 개수와 CNN 채널 값으로 SPP의 출력이 결정되므로, 항상 동일한 크기의 결과를 리턴한다고 볼 수 있습니다.` 실제 실험에서 저자들은 1x1, 2x2, 3x3, 6x6 총 4개의 피라미드로 SPP를 적용합니다.
@@ -261,14 +261,14 @@ CNN을 한번만 통과시킨 뒤, 그 피쳐맵을 공유하는 것은 이미 S
     * 자, 이제 피쳐 맵에서 RoI를 찾고 RoI Pooling을 적용하기 위해서 `H x W 크기의 grid로 나눕니다.` 이 그리드들을 `sub-window`라고 부르며, 위 수식에서 j란 몇 번째 sub-window 인지를 나타내는 `인덱스`입니다. `yrj`란 이 RoI pooling을 통과하여 최종적으로 얻어진 `output의 값`이며 이 역시 하나의 실수입니다. 이를 그림으로 나타내면 아래와 같습니다.
     <br/>
     <br/>
-    * ![](./image/Back_Prop_through_RoI_Pooling.png)
+    * ![Back_Prop_through_RoI_Pooling](./image/Back_Prop_through_RoI_Pooling.png)
     * xi가 최종 prediction 값에 영향을 주려면 xi가 속하는 모든 RoI의 sub-window에서 해당 xi가 최대 값이 되면 됩니다.
     * `i*(r, j)`란 RoI와 sub window index j가 주어졌을 때 최대 피쳐 값의 인덱스를 말하며, 이는 곧 RoI Pooling을 통과하는 인덱스 값을 말합니다.
     * 이 RoI Pooling을 통과한 이후 값에 대한 Loss는 이미 전체 Loss에 대한 yrj의 편미분 값으로 이미 계산이 되어 있습니다. 그러므로 이를 중첩시키기만 하면 xi에 대한 loss를 구할 수 있는 것입니다.
 
 * 결론
     * 우리는 앞서 구한 multitask loss를 RoI Pooling layer를 통과하여 CNN 단까지 fine-tuning 할 수 있는 것입니다. 저자들은 실험을 통해서 실제로 CNN까지 fine tuning 하는 것이 성능 향상에 도움이 되었다는 실험 결과를 보여줍니다.
-    * ![](./image/fine-tuning_깊이에_따른_성능_변화.png)
+    * ![fine-tuning](./image/fine-tuning_깊이에_따른_성능_변화.png)
     * 위 실험 결과는 fine-tuning 하는 깊이를 조절해가며 성능 변화를 실험한 것입니다. CNN의 단을 깊이 학습시킬 수록 성능이 향상되었으며, 이 때 테스트에 소요되는 시간 변화는 거의 없는 것을 확인할 수 있습니다. 즉, `CNN 단을 Object Detection에 맞게끔 fine-tuning 하는 것`이 성능 향상의 키 포인트 였습니다. 
 
 * 의의
