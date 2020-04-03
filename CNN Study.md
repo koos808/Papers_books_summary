@@ -227,4 +227,4 @@ CNN을 한번만 통과시킨 뒤, 그 피쳐맵을 공유하는 것은 이미 S
 * RoI Pooling
     * Fast R-CNN에서 먼저 입력 이미지는 CNN을 통과하여 피쳐맵을 추출합니다. 추출된 피쳐맵을 미리 정해놓은 H x W 크기에 맞게끔 그리드를 설정합니다. 그리고 각각의 칸 별로 가장 큰 값을 추출하는 max pooling을 실시하면 결과값은 항상 H x W 크기의 피쳐 맵이 되고, 이를 쫙 펼쳐서 feature vector를 추출하게 됩니다. 이러한 RoI Pooling은 앞서 살펴보았던 Spatial Pyramid Pooling에서 피라미드 레벨이 1인 경우와 동일합니다.
 
-    * ![RoI Pooling](./image/RoI_Pooling.png)
+    * ![RoI Pooling](image/RoI_Pooling.png)
