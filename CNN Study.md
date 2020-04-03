@@ -89,7 +89,7 @@ Non-Maximum Supperssion, IoU(Intersection over Union) => 기준 0.5, Bounding Bo
     * Classification 단계에서 SVM을 통과하여 `각각 박스들은 어떤 물체일 확률 값(Score)`을 가지게 되었습니다. -> 여기서 의문점 : `2천개 박스가 모두 필요한 것인가?` -> 물론 `NO NO`
     * 동일한 물체에 여러 개 박스가 쳐져 있다면, 가장 스코어가 높은 박스만 남기고 나머지는 제거하고, 이 과정을 Non-Maximum Suppression이라 합니다.
     * 이 때 서로 다른 두 박스가 동일한 물체에 쳐져 있다고 `어떻게 판별`할 수 있을까요? -> 여기서 `IoU(Intersection over Union) 개념`이 적용됩니다. 쉽게 말하면 두 박스의 `Area of Overlap(교집합)/Area of Union(합집합) 값`을 의미하며 두 박스가 일치할 수록 1에 가까운 값에 나오게 됩니다.
-    * * ![](./image/IoU.png)
+    * ![](./image/IoU.png)
     * 논문에서는 Iou가 `0.5보다 크면` 동일한 물체를 대상으로 한 박스로 판단하고 Non-Maximum Suppression을 적용합니다.
 * 5.`Bounding Box Regression`
     * 위의 단계를 거치며 물체가 있을 법한 위치를 찾고, 해당 물체의 종류를 판별할 수 있는 Classification Model을 학습시켰습니다. 하지만 위의 단계까지만 거치면 Selective Search를 통해서 찾은 박스 위치는 상당히 부정확하게 됩니다.
@@ -165,8 +165,7 @@ FC layer 통과 전에 피쳐 맵들을 동일한 크기로 조절해주는 pool
     * Spatial Pyramid Pooling을 통해서 각기 크기가 다른 CNN 피쳐맵 인풋으로부터 고정된 크기의 feature vector를 뽑아내는 것에 있다. 그 이후의 접근 방식은 R-CNN과 거의 동일다.
 
 * `SPP(Spatial Pyramid Pooling)` - 공간 피라미드 풀링
-    ![](./image/Spatial_Pyramid_Pooling.png)
-
+    * ![](./image/Spatial_Pyramid_Pooling.png)
     * Conv Layer를 거쳐 추출된 feature map을 Input으로 받고 이를 미리 정해져 있는 영역으로 나누어 줍니다. 예를 들어 4x4(16), 2x2(4), 1x1(1) 세가지 영역이 있는데 각각을 하나의 피라미드라고 칭합니다. 즉, 3개의 피라미드를 설정한 것이며 피라미드 한 칸을 bin이라고 합니다. 예를 들어 입력이 64 x 64 x 256 크기의 피쳐 맵이 들어온다고 했을 때, 4x4의 피라미드의 bin의 크기는 16x16이 됩니다.
     * 이제 각 bin에서 가장 큰 값만 추출하는 max pooling을 수행하고, 그 결과를 쭉 이어붙여 줍니다. 입력 피쳐맵의 체널 크기를 k, bin의 개수를 M이라고 했을 때 `SPP의 최종 아웃풋은 kM 차원의 벡터`입니다. 위의 예시에서 k = 256, M = (16 + 4 + 1) = 21 이 됩니다.
     * `정리해보면 입력 이미지의 크기와는 상관없이 미리 설정한 bin의 개수와 CNN 채널 값으로 SPP의 출력이 결정되므로, 항상 동일한 크기의 결과를 리턴한다고 볼 수 있습니다.` 실제 실험에서 저자들은 1x1, 2x2, 3x3, 6x6 총 4개의 피라미드로 SPP를 적용합니다.
@@ -224,7 +223,57 @@ CNN을 한번만 통과시킨 뒤, 그 피쳐맵을 공유하는 것은 이미 S
 
 ### 중요 Key Point
 
-* RoI Pooling
+* `RoI Pooling`
     * Fast R-CNN에서 먼저 입력 이미지는 CNN을 통과하여 피쳐맵을 추출합니다. 추출된 피쳐맵을 미리 정해놓은 H x W 크기에 맞게끔 그리드를 설정합니다. 그리고 각각의 칸 별로 가장 큰 값을 추출하는 max pooling을 실시하면 결과값은 항상 H x W 크기의 피쳐 맵이 되고, 이를 쫙 펼쳐서 feature vector를 추출하게 됩니다. 이러한 RoI Pooling은 앞서 살펴보았던 Spatial Pyramid Pooling에서 피라미드 레벨이 1인 경우와 동일합니다.
 
-    * ![RoI Pooling](image/RoI_Pooling.png)
+    * ![RoI Pooling](./image/RoI_Pooling.png)
+    * `인풋 이미지와 피쳐맵의 크기가 다를 경우 어떻게 RoI의 위치를 피쳐맵에서 찾을 수 있을까?`
+    -> 인풋 이미지의 크기와 피쳐맵의 크기가 다를 경우, 그 비율을 구해서 RoI를 조절한 다음, RoI Pooling을 진행한다고 합니다.
+
+* `Multi Task Loss`
+    * 지금까지 이미지로부터 feature map을 추출했고, 해당 feature amp에서 RoI들을 찾아서 ROI Pooling을 적용해 feature vector를 구했습니다. 이제 이 벡터로 `classification과 bounding box regression을 적용`하여 `각각의 loss`를 얻어내고, 이를 back propagation하여 `전체 모델을 학습`시키면 됩니다. 
+    * 이 때, `classificaiton loss와 bounding box regression을 적절하게 엮어주는 것`이 필요하며, 이를 `multi task loss`라고 합니다.
+    * multi task loss 수식 : $L(p,u,t^u,v) = L_{cls}(p,u) + \lambda[u\geq1]\;L_{loc}(t^u,v)$
+        * u는 해당 RoI의 ground truth label 값이다. 
+    * Softmax 결과 : $p\;=\;(p_0,\;...\;,\;p_K)$
+        * 먼저 입력으로 p는 softmax를 통해서 얻어낸 K+1 (K개의 object + 1개의 배경, 아무 물체도 아님을 나타내는 클래스)개의 확률 값입니다.
+        * v는 ground truth bounding box 조절 값에 해당합니다.
+    * BB Regression 결과 중 일부 : $t^u = (t_x^u,t_y^u,t_w^u,t_h^u)$
+        * 그 다음으로 bounding box regression을 적용하면 이는 K + 1개 클래스에 대해서 각각 x, y, w, h 값을 조정하는 tk를 리턴합니다. 즉, 이 RoI가 사람일 경우 박스를 이렇게 조절해라, 고양이일 경우 이렇게 조절해라는 값을 리턴합니다. 로스 펑션에서는 이 값들 가운데 ground truth 라벨에 해당하는 값만 가져오며, 이는 tu에 해당합니다. 
+    * Classification loss : $L_{cls}(p,u) = -logp_u$
+        * 전체 loss의 앞부분은 p와 u를 가지고 classification loss를 구합니다. 
+    * Bounding Box Regression loss : $L_{loc}(t^u,v) =  \sum_{i \notin x,y,w,h} smooth_{L_1}(t_i^u-v_i)$
+        * 입력으로는 정답 라벨에 해당하는 BBR 예측 값과 ground truth 조절 값을 받습니다. 그리고 x, y, w, h 각각에 대해서 예측 값과 라벨 값의 차이를 계산한 다음, smoothL1이라는 함수를 통과시킨 합을 계산합니다. smoothL1은 아래와 같습니다.
+    * $smooth_{L_1}(x)=\begin{cases}0.5x^2,&{if |x| <1} \\ |x|-0.5 &  {otherwise,}\end{cases}$
+    * `예측 값과 라벨 값의 차가 1보다 작으면` 0.5x^2로 L2 distance를 계산해줍니다. 반면에 `1보다 클 경우` L1 distance를 계산해주는 것을 볼 수 있습니다. 이는 Object Detection Task에 맞추어 Loss function을 커스텀 하는 것으로 볼 수 있습니다.
+    * 저자들은 실험 과정에서 Label 값과 지나치게 차이가 많이 나는 outlier 예측 값들이 발생했고, 이들을 그대로 L2 distance로 계산하여 적용할 경우 `gradient가 explode 해버리는 현상`을 관찰했다고 합니다. `이를 방지하기 위해서 다음과 같은 함수를 추가한 것입니다.`
+
+
+이제 Loss function까지 구했으니 `네트워크를 학습시키는 일`만 남았습니다. 그런데 그 전에 짚고 넘어가야할 문제가 있습니다. <u> 바로 네트워크를 어디까지 학습시킬 것인가?</u> 입니다.
+
+이전 SPP Net에서는 피쳐 맵을 뽑는 CNN 부분은 그대로 놔두고, `SPP 이후의 FC들만 fine-tune` 하였습니다.\
+<-> 그러나 이 논문에서는 이럴 경우 이미지로부터 특징을 뽑는 가장 중요한 역할을 하는 CNN이 학습될 수 없기 때문에 `성능 향상에 제약이 있다고 주장`합니다. 그리고 과연 RoI Pooling 레이어 이전까지 back propagation을 전달할 수 있는지를 이론적으로 검증합니다.
+
+* `Backpropagation through RoI Pooling Layer`
+    * Back Prop through RoI Pooling 수식 : ${\partial L \over\partial x_i} = \sum_r\sum_j[i=i^*(r,j)]\;{\partial L \over \partial y_rj}.$
+    * xi 라고 하는 것은 CNN을 통해 추출된 피쳐 맵에서 하나의 피쳐 값을 의미하며, 이는 실수입니다.
+    * 전체 Loss에 대해서 이 피쳐 값의 편미분 값을 구하면 그 값이 곧 xi에 대한 loss 값이 되며 역전파 알고리즘을 수행할 수 있습니다.
+    * 자, 이제 피쳐 맵에서 RoI를 찾고 RoI Pooling을 적용하기 위해서 `H x W 크기의 grid로 나눕니다.` 이 그리드들을 `sub-window`라고 부르며, 위 수식에서 j란 몇 번째 sub-window 인지를 나타내는 `인덱스`입니다. `yrj`란 이 RoI pooling을 통과하여 최종적으로 얻어진 `output의 값`이며 이 역시 하나의 실수입니다. 이를 그림으로 나타내면 아래와 같습니다.
+    <br/>
+    <br/>
+    * ![](./image/Back_Prop_through_RoI_Pooling.png)
+    * xi가 최종 prediction 값에 영향을 주려면 xi가 속하는 모든 RoI의 sub-window에서 해당 xi가 최대 값이 되면 됩니다.
+    * `i*(r, j)`란 RoI와 sub window index j가 주어졌을 때 최대 피쳐 값의 인덱스를 말하며, 이는 곧 RoI Pooling을 통과하는 인덱스 값을 말합니다.
+    * 이 RoI Pooling을 통과한 이후 값에 대한 Loss는 이미 전체 Loss에 대한 yrj의 편미분 값으로 이미 계산이 되어 있습니다. 그러므로 이를 중첩시키기만 하면 xi에 대한 loss를 구할 수 있는 것입니다.
+
+* 결론
+    * 우리는 앞서 구한 multitask loss를 RoI Pooling layer를 통과하여 CNN 단까지 fine-tuning 할 수 있는 것입니다. 저자들은 실험을 통해서 실제로 CNN까지 fine tuning 하는 것이 성능 향상에 도움이 되었다는 실험 결과를 보여줍니다.
+    * ![](./image/fine-tuning_깊이에_따른_성능_변화.png)
+    * 위 실험 결과는 fine-tuning 하는 깊이를 조절해가며 성능 변화를 실험한 것입니다. CNN의 단을 깊이 학습시킬 수록 성능이 향상되었으며, 이 때 테스트에 소요되는 시간 변화는 거의 없는 것을 확인할 수 있습니다. 즉, `CNN 단을 Object Detection에 맞게끔 fine-tuning 하는 것`이 성능 향상의 키 포인트 였습니다. 
+
+* 의의
+    * 해당 논문은 object detection Task를 푸는 end-to-end 모델을 제시하면서 학습 단계를 간소화시키고 정확도와 성능 모두를 향상시켰다는 의의가 있습니다.
+    * 그러나 여전히 region proposal을 selective search로 수행하고, 이는 CPU 연산으로만 수행 가능하다는 한계점이 있습니다. 이 부분을 제외하면 inference에 소요되는 시간이 0.3초 정도로 짧습니다.
+    * Faster R-CNN 모델은 Fast R-CNN의 구조를 그대로 계승하면서 Region Proposal 역시 전체 네트워크의 일부로 끌어옵니다.
+
+이 외에도 해당 논문에서는 `SVD (Singular Vector Decomposition, 특이값 분해)`를 통해서 Fully Connected Layer 들의 파라미터를 줄이는 방법 등이 소개되었지만 이후의 연구들에서는 사용되어 지지않고, 지나치게 어렵기 때문에 생략했다.
