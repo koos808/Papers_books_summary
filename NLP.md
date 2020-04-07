@@ -161,7 +161,12 @@
 #### 10. LSTM
 * 영상 참고
 
+#### 11. Sequence to Sequence + Attention Model
+
+* 영상 참고
+
+
+
 #### 아래 두개 해야 됨.
-* Sequence to Sequence + Attention Model
 * Transformer(Attention is all you need)
 
