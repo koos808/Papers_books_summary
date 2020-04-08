@@ -161,12 +161,40 @@
 #### 10. LSTM
 * 영상 참고
 
-#### 11. Sequence to Sequence + Attention Model
-
+#### 11. Sequence to Sequence with Attention Model
 * 영상 참고
 
+#### 12.Transformer(Attention is all you need)
+* 영상 참고
+
+1. Transformer는 기존 encoder decoder architecture를 발전시킨 모델이다.
+2. RNN을 사용하지 않는다.
+3. RNN 기반 모델보다 학습이 빠르고 성능이 좋다.(Faster, Better!)
+
+* How faster?
+    * Reduced sequence computation
+    * Parallelization(병렬)
+
+`※ Encoder`
+
+기존 인코더, 디코더의 주요 컨셉을 간직하되 RNN을 없애서 학습 시간을 단축시켰으며 성능도 올렸다.
+
+* Positional encoding
+    * 단어의 위치와 순서 정보를 활용하기 때문에 rnn을 사용했는데 rnn을 제거 했기 때문에 Positional encoding을 사용한다.
+    * Positional encoding이란 인코더 및 디코더 입력값마다 상대적인 위치정보를 더해주는 기술이다.
+    * 장점 1 : 항상 Positional encoding의 값은 -1~1 사이의 값이다.
+    * 장점 2 : 학습 데이터 중 가장 긴 문장보다도 긴 문장이 운영 중 들어왔을 때 에러없이 상대적인 인코딩 값을 줄 수 있다.
+
+* Self Attention
+    * Quary, key, value => vector의 형태
+    * Quary * key = Attention Score
+        * Score가 높을수록 단어의 연관성이 높고 Score가 낮을수록 연관성이 낮다.
+* Residual Connection followed by layer normalization
+* Encoder Layer에 입력 vector와 출력 vector의 차원의 크기는 동일하다. -> 이는 즉, Encoder Layer를 여러개 붙혀서 사용할 수 있다는 뜻이다. Transformer는 Encoder Layer를 6개 붙혀서 만든 구조다.
+* Transformer Encoder의 최종 출력 값은 6번째 인코더 레이어의 출력값이다.
+
+`※ Decoder`
+Decoder는 Encoder와 동일하게 6개의 Layer로 구성되어있다. 
 
 
-#### 아래 두개 해야 됨.
-* Transformer(Attention is all you need)
-
+* Label Smoothing -one hot encoding이 아님.
