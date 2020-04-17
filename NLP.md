@@ -198,3 +198,8 @@ Decoder는 Encoder와 동일하게 6개의 Layer로 구성되어있다.
 
 
 * Label Smoothing -one hot encoding이 아님.
+
+---
+### Question
+* word embedding이랑 character embedding을 같이 사용하는 이유 -> word embedding만 사용하면 새로운 단어가 들어왔을 때 얼타는 경우가 있는데, character emmbedding을 사용하면 모든 문자와 특수문자 모두를 사용하기 때문에 조금 더 정확도가 올라간다.
+* uni-LSTIM(한방향)이 아니라 Bi-LSTM(양방향)으로 학습하는 이유? -> 앞으로도 읽어보고 뒤로도 읽어보고 다양한 방법으로 context를 이해하기 위함.
