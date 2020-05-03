@@ -1,18 +1,4 @@
-# 세미나 발표 준비
-
-### 발표 논문 : XLNet: Generalized Autoregressive Pretraining for Language Understanding
-
-* paper url : https://arxiv.org/pdf/1906.08237.pdf
-
-* 참고 사이트
-    * https://www.youtube.com/watch?v=koj9BKiu1rU&t=1327s
-    * https://www.slideshare.net/SungnamPark2/pr175-xlnet-generalized-autoregressive-pretraining-for-language-understanding-152887456
-    * https://ai-information.blogspot.com/2019/07/nl-041-xlnet-generalized-autoregressive.html
-    * https://blog.pingpong.us/xlnet-review/
-    * https://ratsgo.github.io/natural%20language%20processing/2019/09/11/xlnet/
-
-* 목표 : 전부 다 읽고 XLNet 이해하기
-
+## NLP 기초
 ### Part 1. NLP(Natural Language Processing, 자연어처리) 기초 다지기 위해 강의 수강
 
 * https://www.youtube.com/watch?v=dKYFfUtij_U&list=PLVNY1HnUlO26qqZznHVWAqjS1fWw0zqnT
@@ -203,3 +189,123 @@ Decoder는 Encoder와 동일하게 6개의 Layer로 구성되어있다.
 ### Question
 * word embedding이랑 character embedding을 같이 사용하는 이유 -> word embedding만 사용하면 새로운 단어가 들어왔을 때 얼타는 경우가 있는데, character emmbedding을 사용하면 모든 문자와 특수문자 모두를 사용하기 때문에 조금 더 정확도가 올라간다.
 * uni-LSTIM(한방향)이 아니라 Bi-LSTM(양방향)으로 학습하는 이유? -> 앞으로도 읽어보고 뒤로도 읽어보고 다양한 방법으로 context를 이해하기 위함.
+
+# 세미나 발표 준비
+
+### 발표 논문 : XLNet: Generalized Autoregressive Pretraining for Language Understanding
+
+* paper url : https://arxiv.org/pdf/1906.08237.pdf
+
+* 참고 사이트
+    * https://www.youtube.com/watch?v=koj9BKiu1rU&t=1327s
+    * https://www.slideshare.net/SungnamPark2/pr175-xlnet-generalized-autoregressive-pretraining-for-language-understanding-152887456
+    * https://ai-information.blogspot.com/2019/07/nl-041-xlnet-generalized-autoregressive.html
+    * https://blog.pingpong.us/xlnet-review/
+    * https://ratsgo.github.io/natural%20language%20processing/2019/09/11/xlnet/
+
+* 목표 : 전부 다 읽고 XLNet 이해하기
+
+### ※ XLNet 정리
+
+참고 사이트 : https://ratsgo.github.io/natural%20language%20processing/2019/09/11/xlnet/
+
+#### 기본 내용
+---
+* XLNet은 트랜스포머 네트워크(Vaswani et al., 2017)를 개선한 ‘트랜스포머-XL(Dai et al., 2019)’의 확장판 성격의 모델입니다. 
+* 여기에서 XL이란 ‘eXtra-Long’으로, 기존 트랜스포머보다 좀 더 넓은 범위의 문맥(context)를 볼 수 있다는 점을 강조하는 의미로 쓰였습니다.
+
+#### 퍼뮤테이션 언어모델 (Permutaion Language Model)
+---
+* Yang et al.(2019) 최근 임베딩 모델의 두 가지 흐름 : `오토리그레시브(AutoRegressive, AR) 모델`, `오토인코딩(AutoEncoding, AE) 모델`
+
+* `오토리그레시브(AutoRegressive, AR) 모델`
+  * `AR 모델`은 데이터를 순차적으로 처리하는 기법의 총칭을 뜻합니다. 
+  * 이 관점에서 보면 `ELMo`나 `GPT`를 AR 범주로 분류할 수 있습니다. 두 모델 모두 이전 문맥을 바탕으로 다음 단어를 예측하는 과정에서 학습하기 때문입니다.
+  * 아래 예제의 문장을 학습하는 경우 AE 모델은 단어를 순차적으로 읽어 나갑니다. <br><br>
+  * Ex) <image src="image/AR model.jpg" style = "width:350px">
+
+* `오토인코딩(AutoEncoding, AE) 모델`
+  * `AE 모델`은 입력값을 복원하는 기법들을 뜻합니다. -> `y=f(x)=x`를 지향합니다.
+  * 대표적인 AE 모델로는 BEAR가 있는데, BERT는 문장 일부에 노이즈(마스킹)을 주어서 문장을 원래대로 복원하는 과정에서 학습하는 모델입니다.
+  * 즉, 마스킹 처리가 된 단어가 실제로 어떤 단어일지 맞추는데 주안점을 두는 것입니다.
+  * 이런 맥락에서 BERT를 디노이징 오토인코더(Denoising Autoencoder)라고 표현하기도 합니다.
+  * 디노이징 오토인코더란 노이즈가 포함된 입력을 받아 해당 노이즈를 제거한 원본 입력을 출력하는 모델입니다. <br><br>
+  * Ex) <image src="image/AE model.jpg" style = "width:300px">
+
+* ※ Yang et al.(2019)의 AE,AR 모델의 **문제점 제안**
+  * AR 모델의 문제점
+    * 문맥을 양방향(bidirectional)으로 볼 수 없는 태생적인 한계가 있다.
+    * 이전 단어를 입력(Input)으로 하고 다음 단어를 출력으로 하는 언어모델을 학습할 때, 맞춰야 할 단어나 그 단어 이후의 `문맥 정보`를 미리 알려줄 수는 없기 때문이다.
+    * 물론 ELMo의 경우는 모델의 최종 출력값을 만들 때 마지막 레이어에서 순방향(forward), 역방향(backward) LSTM 레이어의 계산 결과를 모두 사용하기는 합니다.
+    * 그러나 `pre-train`을 할 때 순방향, 역방향 레이어를 `각각 독립적으로 학습하기 때문에` ELMo는 진정한 의미의 양방향(bidirectional) 모델이라고 말하긴 어렵습니다.
+
+  * AE 모델의 문제점
+    * BERT는 AE의 대표 양방향 모델입니다. 이는 마스크 단어를 예측할 때 앞뒤 문맥을 모두 살피며 성능 또한 좋았습니다. 하지만, AE 모델 역시 단점이 있습니다.
+    * 가장 큰 문제는 <u>마스킹 처리한 토큰들을 서로 독립(independent)이라고 가정한다는 점</u>입니다. 이 경우 `마스킹 토큰들 사이에 의존 관계(dependency)를 따질 수 없게 됩니다.` <br><br>
+    * <image src="image/bert3.jpg" style = "width:300px"> <br><br>
+    * 위 사진은 Yang et al.(2019)이 논문에서 사용한 예시 문장('New York is a city')을 가지고 BERT의 학습 과정을 시각화한 것입니다. 영어 말뭉치에서 “New가 나온 다음에 York라는 단어가 나올 확률”과 “New가 나오지 않았을 경우에 York가 등장할 확률”은 분명히 다를 것입니다. 하지만 BERT 모델은 두 단어의 선후 관계나 등장 여부 등 정보를 전혀 따지지 않습니다. 그저 is a city라는 문맥만 보고 New, York `각각의 마스크 토큰을 독립적으로 예측합니다`.
+    
+    * 또한, BERT는 pre-train할 때 사용하는 마스크 토큰(mask token)은 파인 튜닝(fine-tuning) 과정에서는 사용하지 않습니다. fine-tuning과 다른 pre-train 환경을 구성하면 모델의 일반화(generalization) 성능이 떨어질 수 있다는 단점이 있습니다. 마지막으로 BERT는 긴 문맥을 학습하기 어렵다는 단점도 있습니다.
+
+* ※ AR 모델 문제점 해결 : 퍼뮤테이션 언어모델 - 양방향(bidirectional) 문맥 고려 가능
+  * <u>토큰을 랜덤으로 셔플한 뒤 그 뒤바뀐 순서가 마치 원래 그랬던 것인 양 언어모델을 학습하는 기법이다.</u> 
+  * 아래 그림은 `발 없는 말이 천리 간다`를 퍼뮤테이션 언어모델로 학습하는 예시입니다. 모델은 `‘없는, 이, 말, 발, 간다’`를 입력받아 시퀀스의 마지막 단어인 ‘천리’를 예측합니다.
+
+  * Ex) <image src="image/퍼뮤테이션 언어모델1.jpg" style="width:300px">
+  * 이렇게 퍼뮤테이션을 수행하면 특정 토큰을 예측할 때 `문장 전체 문맥을 살필 수 있게 됩니다`. 즉, 해당 토큰을 제외한 문장의 부분집합 전부를 학습할 수 있다는 뜻입니다.
+  
+  * Ex) 발 없는 말이 천리 간다는 문장을 한번 더 퍼뮤테이션해서 이번엔 `발, 없는, 천리, 이, 말, 간다`가 나왔다고 가정하면, ‘천리’라는 단어를 예측할 때의 입력 시퀀스는 `발, 없는`이 됩니다.
+  * 위 예제처럼 `"천리"`라는 단어를 맞추기 위해 모든 입력 시퀀스들을 조합할 수 있고, 거기엔 순방향 언어모델과 역방향 언어모델 모두 `퍼뮤테이션 언어모델의 부분집합`으로 들어가게 됩니다.
+  * 다시 말해 퍼뮤테이션 언어모델은 시퀀스를 순차적으로 학습하는 AR 모델이지만 퍼뮤테이션을 수행한 토큰 시퀀스 집합을 학습하는 과정에서 `문장의 양방향 문맥을 모두 고려할 수 있게 된다는 이야기`입니다.
+
+* ※ AE 모델 문제점 해결 : 퍼뮤테이션 언어모델 - 단어 간 의존관계를 포착
+  * 퍼뮤테이션 언어모델은 AR이기 때문에 BERT 같은 AE 모델의 단점 또한 극복할 수 있다고 설명합니다.
+  * 퍼뮤테이션 언어모델은 셔플된 토큰 시퀀스를 순차적으로 읽어가면서 다음 단어를 예측하며, 이전 문맥(New)을 이번 예측(York)에 활용합니다.
+  * 따라서 퍼뮤테이션 언어모델은 예측 단어(Masking token) 사이에 독립을 가정하는 BERT와는 달리 단어 간 의존관계를 포착하기에 유리합니다.
+  * 뿐만 아니라, pre-train 때 마스크하지 않기 때문에 pre-train & pine-tuning 간 불일치 문제도 해결할 수 있습니다.
+
+  * Ex) <image src="image/퍼뮤테이션 언어모델3.jpg" style="width:300px">
+
+* ※ 퍼뮤테이션 언어모델(permutaion language model) 학습 예시
+  * <image src="image/퍼뮤테이션 언어모델 학습.jpg" style="width:250px">
+  * ◎ Example 1 : [3,2,4,1]
+  * 토큰 네 개짜리 문장을 랜덤으로 뒤섞은 결과가 그림 7처럼 [3,2,4,1]이고 셔플된 시퀀스의 첫번째 단어(3번 토큰)를 맞춰야 하는 상황이라고 가정해 봅시다.
+  * 그러면 이 때 `3번 토큰 정보`를 넣어서는 안 됩니다. 3번 토큰을 맞춰야 하는데 모델에 3번 토큰 정보를 주면 문제가 너무 쉬워지기 때문입니다. 
+  * 2번, 4번, 1번 토큰은 맞출 토큰(3번) 이후에 등장한 단어들이므로 이들 또한 입력에서 제외합니다. 결과적으로 이 상황에서 `입력값은 이전 세그먼트(segment)의 메모리(memory) 정보뿐입니다`. 메모리와 관련해서는 트랜스포머-XL(transformer-XL)에서 설명합니다.
+  
+  * ◎ Example 2 : [2,4,3,1]
+  * <image src="image/퍼뮤테이션 언어모델 학습2.jpg" style="width:250px">
+  * 같은 문장을 또한번 셔플했더니 [2,4,3,1]이고 이번 스텝 역시 3번 토큰을 예측해야 한다고 가정합시다. 그러면 3번 토큰 이전 문맥(메모리, 2번, 4번 단어)이 입력됩니다. 3번 토큰은 정답이므로 입력에서 제외합니다. 그림 8과 같습니다.
+  
+  * ◎ Example 3 & 4 : [1,4,2,3], [4,3,1,2]
+  * <image src="image/퍼뮤테이션 언어모델 학습3.jpg" style="width:250px"> <image src="image/퍼뮤테이션 언어모델 학습4.jpg" style="width:250px">
+  * 셔플 시퀀스가 [1,4,2,3]이고 3번 토큰을 맞춰야 한다면 입력벡터는 과거 문맥(메모리, 1번, 4번, 2번 단어)이 됩니다. 마찬가지로 [4,3,1,2]이고 3번을 예측한다면 입력값은 메모리, 4번 단어가 됩니다. 각각 그림 9, 그림 10과 같습니다.
+
+* ※ 퍼뮤테이션 언어모델 학습 과정 1 : 원래 시퀀스의 어텐션 마스크 
+  * 퍼뮤테이션 언어모델의 실제 구현은 토큰을 뒤섞는 게 아니라 `어텐션 마스크(attention mask)`로 실현됩니다. 
+  * XLNet의 근간은 기존 트랜스포머 네트워크(Vaswani et al.,2017)이고, 그 핵심은 `쿼리(query), 키(key) 벡터 간 셀프 어텐션(self-attention) 기법`이기 때문입니다. 
+  * 예컨대 토큰 네 개짜리 문장을 단어 등장 순서대로 예측해야 하는 상황을 가정해 봅시다. 이 경우 어텐션 마스크는 그림 11처럼 구축하면 됩니다.
+  
+  * <image src="image/원래 시퀀스 어텐션 마스크.jpg" style="width:300px">
+  * 위 그림에서 좌측 행렬은 `셀프 어텐션을 수행할 때 소프트맥스 확률값에 적용하는 마스크 행렬`입니다. 여기서 마스크(Mask)란 소프트맥스 확률값을 0으로 무시하게끔 하는 역할을 한다는 뜻입니다. 소프트맥스 확률값이 0이 되면 해당 단어의 정보는 `셀프 어텐션에 포함되지 않습니다`. 회색 동그라미는 확률값을 0으로 만드는 마스크라는 뜻이며, 붉은색 동그라미는 확률값을 살리는 의미를 지닙니다.
+  * 그림을 읽는 방법 : 마스크 행렬의 행은 쿼리 단어, 열은 키 단어에 각각 대응합니다. 그림 11처럼 토큰 순서대로 예측해야 하는 경우 1번 단어를 예측할 때는 자기 자신(1번 단어)을 포함해 어떤 정보도 사용할 수 없습니다. 2번 단어를 맞춰야할 때는 이전 문맥인 1번 단어 정보를 활용합니다. 마찬가지로 3번 단어는 1, 2번 단어, 4번 단어는 1, 2, 3번 단어 정보를 쓰게끔 만듭니다. GPT가 그림 11과 같은 방식으로 학습합니다.
+
+* ※ 퍼뮤테이션 언어모델 학습 과정 2 : <u>셔플된 시퀀스의 어텐션 마스크</u>
+  * 아래 그림 12는 퍼뮤테이션 언어모델이 사용하는 어텐션 마스크의 예시입니다.
+ 
+  *  <image src="image/셔플된 시퀀스 어텐션 마스크.jpg" style="width:300px">
+  
+  * 셔플된 토큰 시퀀스가 [3,2,4,1]이라고 가정해 봅시다. 그러면 3번 단어를 맞춰야할 때는 어떤 정보도 사용할 수 없습니다. 2번 단어를 예측할 때는 이전 문맥인 3번 단어 정보를 씁니다. 마찬가지로 4번 단어를 맞출 때는 3번, 2번 단어를, 1번 단어를 예측할 때는 3번, 2번, 4번 단어 정보를 입력합니다.
+
+* ※ 퍼뮤테이션 언어모델 단점 : 투-스트림 셀프 어텐션으로 해결 
+  * 예컨대 단어가 네 개인 문장을 랜덤 셔플한 결과가 다음와 같고 이번 스텝에서 셔플 시퀀스의 세번째를 예측해야 한다고 해봅시다. ==> `[3, 2, "4", 1] , [3, 2, "1", 4]`
+  * 이 경우 모델은 동일한 입력(3번, 2번 단어)을 받아 다른 출력을 내야 하는 모순에 직면합니다. Yang et al.(2019)는 이같은 문제를 해결하기 위해 `투-스트림 어텐션(two-stream self attention) 기법`을 제안했습니다. 
+
+#### 투-스트림 셀프어텐션(Two-Stream Self Attention)
+---
+* ※ 정의
+  * 투-스트림 셀프어텐션(Two-Stream Self Attention)은 `쿼리 스트림(query stream)과 컨텐트 스트림(content stream)` 두 가지를 혼합한 `셀프 어텐션 기법`입니다. 
+
+* ※ 컨텐트 스트림(content stream)
+  * 컨텐트 스트림은 기존 트랜스포머 네트워크와 거의 유사하다.
+  * 
