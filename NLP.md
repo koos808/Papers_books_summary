@@ -205,6 +205,14 @@ Decoder는 Encoder와 동일하게 6개의 Layer로 구성되어있다.
 
 * 목표 : 전부 다 읽고 XLNet 이해하기
 
+### ※ 읽기 전 알아두면 좋을 용어
+* 1.state-of-the-art: https://www.stateoftheart.ai/ 에서 어떠한 과제에서 가장 우수한 모델을 제출했을 때, state-of-the-art를 기록했다고 하는 듯 하다. 단어 자체도 ‘최첨단의 기술’ 이라는 의미와 일맥상통 한다. 
+* 2.`Transfer Learning`: 기존의 만들어진 모델을 사용하여 새로운 모델을 만들시 학습을 빠르게 하며, 예측을 더 높이는 방법이다. 이미 잘 훈련된 모델이 있고, 특히 해당 모델과 유사한 문제를 해결시 transfer learining을 사용한다.
+* 3.`autoregressive(AR) language modelings`: 자기회귀 언어 모델링이라고도 하며, Sequence가 주어졌을 때 문장에게 점수를 부여하는 방법이며, 이전 단어가 주어졌을 때, 다음 단어가 나올 확률들을 전부 곱한 것이다. 이렇게 정의하면서 비지도 학습 문제를 지도학습으로 지도학습으로 바꿀 수 있다.
+* 4.`Transformer-XL`: https://medium.com/dair-ai/a-light-introduction-to-transformer-xl-be5737feb13 을 참조.
+
+참고 : https://catsirup.github.io/ai/2019/07/24/XLNet.html
+
 ### ※ XLNet 정리
 
 참고 사이트 : https://ratsgo.github.io/natural%20language%20processing/2019/09/11/xlnet/
