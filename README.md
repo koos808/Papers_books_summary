@@ -151,4 +151,8 @@ Papers & Books Summary Repository
         * https://arxiv.org/pdf/1903.06478.pdf
         * https://arxiv.org/pdf/1909.12227.pdf
         * https://www.aclweb.org/anthology/U17-1001.pdf
-
+<br>
+* 강화학습 관련 논문 리딩 방향성
+    * Q-MIX 관련 paper
+    * reward function 관련 paper
+    * stock maket trading 관련 paper
