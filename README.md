@@ -64,6 +64,18 @@ Papers & Books Summary Repository
         아마도 3번과 같은 오류는, 귀무가설이 맞다는 전제 하에 모든 일이 이루어진다면 맞는 말이긴 한데, 애초부터 귀무가설이 틀릴 수도 있고, 그렇더라도 p-value는 여전히 구해지기 때문에 뭐라 말할 수 없게 되는 것이다.
         ```
     * 참고 : https://adnoctum.tistory.com/332
+* `1종 오류` & `2종 오류`
+    * 1종 오류(Type 1 Error) : 귀무가설(H0)이 참(True)일 때, 귀무가설(H0)을 기각(Reject)하는 경우 
+    * 2종 오류(Type 2 Error) : 귀무가설(H0)이 거짓(False)일 때, 귀무가설(H0)을 기각하지 못하는 경우
+    * 유의수준(alpha)을 높인다는 것은 2종 오류가 발생할 가능성을 낮춘다는 의미이다.
+        * <-> 유의수준(alpha)을 낮춘다는 것은 2종 오류가 발생할 가능성을 높인다는 의미이다.
+    * 귀무가설(H0)을 기각함으로써 상당한 비용이 발생하는 경우, 연구자는 1종 오류가 발생할 가능성을 최대한 줄이고자 노력할 것이다.
+    * Example : 신약개발
+        * 1종 오류 : 귀무가설(H0-효과x) 참(true)인데 기각함(효과가 없는데 효과가 있다고(H1 채택) 검정함) => 약이 효과가 없는데 불구하고 신약이 효과 있다고 결론 내림 -> 많은 비용(비싼 약값을 주고 효과없는 약을 구매할 확률)이 발생하므로 1종 오류를 줄여야 한다.
+        * 2종 오류 : 귀무가설(H0-효과x) 거짓(false)인데 H0 채택함 -> 신약에 대한 효과가 존재하는데 효과 없다고 검정해버림.
+
+
+<br><br>
 * **딥러닝(Deep Learning)** 과 **머신러닝(Merchine Lerning)**, **인공지능(AI)** 의 구별법
     * 
 
@@ -139,4 +151,8 @@ Papers & Books Summary Repository
         * https://arxiv.org/pdf/1903.06478.pdf
         * https://arxiv.org/pdf/1909.12227.pdf
         * https://www.aclweb.org/anthology/U17-1001.pdf
-
+<br>
+* 강화학습 관련 논문 리딩 방향성
+    * Q-MIX 관련 paper
+    * reward function 관련 paper
+    * stock maket trading 관련 paper
