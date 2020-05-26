@@ -157,7 +157,7 @@
         * 서로 다른 `receptive field`를 만들기 위해서 Image를 바로 convolutions을 하는게 아니라 1x1 convolutions, 3x3 convolutions, 5x5 convolutions로 각각 해보고 그것들을 concatenation한다. 그렇게 concatenation convolution feature map 위에 다시 1x1 convolutions, 3x3 convolutions, average pooling 등을 해주며 다시 `concatenation`한다. 이런식을 계속 반복하면서 output단의 input image 밑의 `receptive field`를 굉장히 다양하게 만들어 준다. 또한 `one by one convolution`을 통해서 `channel dimmension reduction`을 해주면서 Layer를 정의하기에 필요한 파라미터의 수를 줄인 것이 GoogLeNet 논문의 핵심이다.
         * inception module과 보조 classifier가 GoogLeNet이 한 일임.
         * 보조 classifier를 사용해서 vanishing gradinent가 발생해도 아래까지 weight가 업데이트 될 수 있도록 만들었음. 즉, signal이 아래까지 갈 수 있도록 만들었음.
-        * 1x1 conv, 3x3 conv, 5x5 conv 다해보고나서 채널적으로 중복된 정보가 많기 때문에 중복 정보를 줄이기 위해 1x1 filter를 사용한다(액기스만 가져온다). -> conv 하고 싶은거 다하고, 나중에 좋은거 선택하는 방식으로 했음.
+        * 1x1 conv, 3x3 conv, 5x5 conv 다해보고나서 `채널적으로 중복된 정보가 많기 때문에 중복 정보를 줄이기 위해 1x1 conv(filter)를 사용한다(액기스만 가져온다).` -> conv 하고 싶은거 다하고, 나중에 좋은거 선택하는 방식으로 했음.
 * Inception v4
     * 최근에 파라미터를 줄이기 위해서 어디까지 노력했냐의 산물
     * `Inception v4` model에서는 `Inception Module`에서 나오는 5x5 같은 convolutions이 더이상 나오지 않는다. receptive field를 늘리는 입장에서는 3x3 convolutions을 두번하던가 5x5 convolutions을 한번 하는 것과 동일하다.
