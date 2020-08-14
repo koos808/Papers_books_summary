@@ -52,3 +52,6 @@
   * $\theta'$ = $\theta'+\alpha\nabla_\theta J(\theta)$
   * $\nabla_\theta J(\theta)$ = Policy Gradient
   * 즉, 목적함수 $J(\theta)$를 미분한 것을 Policy Gradient라고 한다.
+
+  * ![a](./image/Policy_gradient.jpg)
+
