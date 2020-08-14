@@ -55,3 +55,51 @@
 
   * ![a](./image/Policy_gradient.jpg)
 
+* REINFORCE
+  * Discounted future reward를 Retun G($G_t$)라고 한다.
+  * REINFORCE 알고리즘 업데이트 식
+    * $\theta \leftarrow \theta + \alpha\nabla_\theta J(\theta) = \theta +\alpha\sum_{t=0}^{T-1}\nabla_\theta log\pi_\theta(a_t|s_t)G_t$
+  * 절차
+    * 1.한 에피소드를 현재 정책에 따라 실행
+    * 2.Trajectory를 기록
+    * 3.에피소드가 끝난 뒤 $G_t$ 계산
+    * 4.Policy gradient를 계산해서 정책 업데이트
+    * 5.(1~4) 반복 : 에피소드마다 업데이트하고 반복하므로 몬테카를로 Policy gradient라 부르며 이를 REINFORCE 알고리즘이라고 한다.
+  * `REINFORCE 알고리즘의 문제점`
+    * Variance가 높다.  ::: 에피소드가 길어질수록 다양한 Trajectory가 된다.
+    * 에피소드마다 업데이트가 가능하다(on-line이 아니다.) -> 에이전트와 환경이 상호작용하는 동안에 업데이트를 할 수 없으므로 online이 아닌 offline으로 학습이 된다.
+
+* REINFORCE 알고리즘을 보완한 Actor-Critic
+  * 몬테카를로 -> `TD(Temporal-Difference)` 
+    * 몬테카를로는 끝날때까지 진행하고 업데이트 하지만, TD는 한번만 진행해보고 업데이트하는 것이다.
+  * REINFORCE -> `Actor-Critic`
+    * 위의 몬테카를로에서 TD로 바꾸는 방법과 비슷한 뉘앙스이다.
+    * 즉, REINFORCE 알고리즘은 에피소드가 끝나야 업데이트가 가능했지만, Actor-Critic은 매 스텝이 끝날 때마다 업데이트가 가능하도록 고안한 것이다.
+
+* `Actor-Critic`
+  * $\theta \leftarrow \theta + \alpha\nabla_\theta J(\theta) = \theta +\alpha\sum_{t=0}^{T-1}\nabla_\theta log\pi_\theta(a_t|s_t)G_t$ 의 $G_t$를 $Q_{\pi\theta}(s_t,a_t)$로 바꿀 수 있다.
+  * 만약 $Q_{\pi\theta}(s_t,a_t)$를 알 수 있다면 매 time-step마다 업데이트하는 것이 가능해진다!!!
+  * $Q_{\pi\theta}(s_t,a_t) \sim Q_w(s_t,a_t)$ ::: 즉, 두 개의 네트워크(Q-function과 Policy)를 사용한다는 뜻. 이 부분(Q)이 **Critic**이 된다.
+  * 내가 지금 하는 행동에 대해서 Q가 좋은지 안좋은지를 판단해 주는 것이 **Critic**이다.
+
+* `Actor-Critic` - Advantage 함수
+  * `Advantage 함수` = 큐함수 - 베이스라인 -> Variance를 낮춰준다.
+  * Q-function : 특정 상태, 특정 행동에 따른 값
+  * Value-function : 특정 상태, 전반적 행동에 따른 값 -> 베이스라인
+
+* 간단 요약
+  * `Actor`
+    * 1) 정책(Policy)을 근사 : $\theta$
+    * 2) $\nabla_\theta log\pi_\theta (a_t|s_t)(r_{t+1} + \gamma V_v(s_{t+1})-V_v(s_t))$로 업데이트
+  * `Critic`
+    * 가치함수(Value function)을 근사 : v
+    * $(r_{t+1} + \gamma V_v(s_{t+1})-V_v(s_t))^2$의 loss function으로 업데이트
+
+* `A3C`
+  * Actor-Critic과 다른점
+    * Actor를 업데이트하는 과정에서 아래 2가지 부분이 다르다.
+    * 1.Multi-step loss function
+      * 1-step => multi-step(bias가 줄일 수 있으며 효율적인 시간활용을 할 수 있다.)
+      * ex) 20 step : 20 step마다 20개의 loss function을 더한 것으로 업데이트
+    * 2.Entropy loss function
+      * 20개의 cross entropy : exploitation
