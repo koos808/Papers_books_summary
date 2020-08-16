@@ -86,7 +86,7 @@
   * $\nabla_\theta J(\theta)$ = Policy Gradient
   * 즉, 목적함수 $J(\theta)$를 미분한 것을 Policy Gradient라고 한다.
 
-  * ![a](./image/Policy_gradient.jpg)
+  * ![a](./image/Policy_gradient.png)
 
 * REINFORCE
   * Discounted future reward를 Retun G($G_t$)라고 한다.
