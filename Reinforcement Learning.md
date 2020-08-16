@@ -1,6 +1,7 @@
 # 강화학습
 
-## A3C
+## A3C : Asynchronous Advantage Actor-Critic(Mnih et al., 2016)
+---
 
 * 참고1 : RLCode와 A3C 쉽고 깊게 이해하기(https://www.youtube.com/watch?v=gINks-YCTBs&t=357s)
 * 참고2 : [쉽게읽는 강화학습 논문 4화] A3C 논문 리뷰(https://www.youtube.com/watch?v=lfaaGQcQ2FE)
@@ -124,7 +125,7 @@
     * 1) 정책(Policy)을 근사 : $\theta$
     * 2) $\nabla_\theta log\pi_\theta (a_t|s_t)(r_{t+1} + \gamma V_v(s_{t+1})-V_v(s_t))$로 업데이트
   * `Critic`
-    * 가치함수(Value function)을 근사 : v
+    * 가치함수(Value function)을 근사 : $v$
     * $(r_{t+1} + \gamma V_v(s_{t+1})-V_v(s_t))^2$의 loss function으로 업데이트
 
 * `A3C`
@@ -137,3 +138,33 @@
       * 20개의 cross entropy : exploitation
 * A3C pseudocode(수도 코드) <br/>
   <image src="image/A3C6.jpg" style="width:600px;">
+
+## DDPG :  Deep Deterministic Policy Gradient(Lillicrap et al, 2015)
+---
+
+* 참고 1 : PR-019: Continuous Control with Deep Reinforcement Learning(https://www.youtube.com/watch?v=h2WSVBAC1t4)
+* 논문 : Continuous Control with Deep Reinforcement Learning(https://arxiv.org/abs/1509.02971)
+
+* 개요
+  * `DDPG(Deep Deterministic Policy Gradient)`는 DPG에 DQN을 결합시킨 **model-free off-policy actor-critic algorithm**이다. DQN(Deep Q-Network)는 experience replay와 frozen target network를 통해서 Q-network에 대한 학습을 안정화시켰다. 원래 DQN은 discrete space상에서 동작하지만, DDPG는 actor-critic framework를 활용하여 deterministic policy를 학습하면서 ㅎ과를 continuous space까지로 확장시켰다.
+
+* DQN
+  * high-dimensional observation spaces
+  * discrete and low-dimensional action spaces
+  * Limitation of DQN
+    * high-dimensional observation spaces에서는 잘 작동했지만 high-dimensional Continuous Action Spaces의 경우에는 잘 작동하지 않았다.
+    * 따라서, high-dimensional Continuous Action Spacesdml의 경우에 Deep RL을 어떻게 구현할 수 있을까? 하는 의문에서 나온 것이 **DDPG**다. 
+
+* Q-learning(No), Policy Gradient(Yes)
+  * Q-learning자체가 discrete한 action space에 맞는 방법이다. 따라서 Q-learning말고 Continuous한 Action space를 처리할 수 있는 (Deterministic) Policy Gradient 기법을 사용하도록 한다.
+  * 그런데, neural network(nonlinear function approximator)로 actor-critic을 구현하는 것은 어려웠다.(unstable and challenging)
+  * 따라서, DQN에서의 insight를 가져와서 해결하도록 했다.
+    * Experience Replay
+    * Target Network의 사용 : Modified using "soft" target updates(일정 iteration이 다 돌고 update하는 것이 아닌 조금씩 soft하게 update하는 것을 의미함)
+    * Batch Normalization
+
+* Policy
+  * $\pi, \mu$ = policy
+  * `Deterministic` policy : $a=\mu(s)$
+  * Stochastic policy : $\pi(a|s)$
+  * 
