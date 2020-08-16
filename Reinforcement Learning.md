@@ -182,7 +182,7 @@
   * <image src="image/DDPG3.jpg" style="width:600px;">
 
 * DDPG
-  * <image src="image/DDPG4.jpg" style="width:500px;">
+  * <image src="image/DDPG4.png" style="width:500px;">
   * $(s_1,a_t,r_t,s_{t+1})$이 있으면 Q-function을 업데이트할 수 있으니, 이를 replay buffer $R$에다가 넣어둔다.
   * $R$에서 $N$개의 mini-batch size만큼을 뽑아서 target 값 $y_i$를 계산한다.
   * 그리고 loss function을 적용해 critic과 actor policy를 업데이트한다.
