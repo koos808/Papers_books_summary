@@ -37,7 +37,7 @@
 * One-step Q-learning(Value-based & off-policy)
   * ex) T=5 일 때마다 Update the target network $(\theta^- \leftarrow \theta)$
   * Epsilon은 각 actor마다 다르게 설정할 수 있다. <br/><br/>
-  * <image src="image/Q-learning.jpg" style="width:400px">
+  * <image src="image/Q-learning.png" style="width:400px">
 
 * One-step SARSA(Q-learning의 on-policy 버전 -> 내 policy의 action이 target을 정하는데 쓰임.)
   * 위의 Q-learning과 모두 동일하고, Q의 target value { $r+\gamma max_{a'}Q(s',a';\theta^-)$ }만 { $r+\gamma Q(s',a';\theta')$ } 이렇게 바꾸면 SARSA Version이 된다.
@@ -64,9 +64,9 @@
       * 정책을 업데이트할 때마다 어떤 방향으로 업데이트할 지에 대한 기준
         * -> 목표함수(Objective function) or $J(\theta)$ <br/><br/>
   * Policy gradient equivalent forms <br/> 
-    <image src="image/A3C4.jpg" style="width:500px"> 
-    <image src="image/A3C5.jpg" style="width:500px"> 
-    <image src="image/A3C3.jpg" style="width:500px"> 
+    <image src="image/A3C4.png" style="width:500px"> 
+    <image src="image/A3C5.png" style="width:500px"> 
+    <image src="image/A3C3.png" style="width:500px"> 
 
 
 * 목표함수
@@ -137,7 +137,7 @@
     * 2.Entropy loss function
       * 20개의 cross entropy : exploitation
 * A3C pseudocode(수도 코드) <br/>
-  <image src="image/A3C6.jpg" style="width:600px;">
+  <image src="image/A3C6.png" style="width:600px;">
 
 ## DDPG :  Deep Deterministic Policy Gradient(Lillicrap et al, 2015)
 ---
