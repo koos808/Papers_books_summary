@@ -36,7 +36,7 @@
 * One-step Q-learning(Value-based & off-policy)
   * ex) T=5 일 때마다 Update the target network $(\theta^- \leftarrow \theta)$
   * Epsilon은 각 actor마다 다르게 설정할 수 있다. <br/><br/>
-  * <image src="image/A3C2.jpg" style="width:400px">
+  * <image src="image/Q-learning.jpg" style="width:400px">
 
 * One-step SARSA(Q-learning의 on-policy 버전 -> 내 policy의 action이 target을 정하는데 쓰임.)
   * 위의 Q-learning과 모두 동일하고, Q의 target value { $r+\gamma max_{a'}Q(s',a';\theta^-)$ }만 { $r+\gamma Q(s',a';\theta')$ } 이렇게 바꾸면 SARSA Version이 된다.
@@ -61,7 +61,12 @@
       * 매 스텝마다 에이전트가 행동을 선택하는 기준 -> 가치함수(Value function)
     * 2) 정책 기반 강화학습(Policy-based)
       * 정책을 업데이트할 때마다 어떤 방향으로 업데이트할 지에 대한 기준
-        * -> 목표함수(Objective function) or $J(\theta)$
+        * -> 목표함수(Objective function) or $J(\theta)$ <br/><br/>
+  * Policy gradient equivalent forms <br/> 
+    <image src="image/A3C4.jpg" style="width:500px"> 
+    <image src="image/A3C5.jpg" style="width:500px"> 
+    <image src="image/A3C3.jpg" style="width:500px"> 
+
 
 * 목표함수
   * 에이전트가 정책 $\pi_\theta$ 에 따라서 가게 되는 "경로,궤적(trajectory)"을 생각해보자!
@@ -130,3 +135,5 @@
       * ex) 20 step : 20 step마다 20개의 loss function을 더한 것으로 업데이트
     * 2.Entropy loss function
       * 20개의 cross entropy : exploitation
+* A3C pseudocode(수도 코드) <br/>
+  <image src="image/A3C6.jpg" style="width:600px;">
