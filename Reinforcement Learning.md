@@ -2,10 +2,13 @@
 
 ## A3C
 
-* 참고 : RLCode와 A3C 쉽고 깊게 이해하기(https://www.youtube.com/watch?v=gINks-YCTBs&t=357s)
-* 
+* 참고1 : RLCode와 A3C 쉽고 깊게 이해하기(https://www.youtube.com/watch?v=gINks-YCTBs&t=357s)
+* 참고2 : [쉽게읽는 강화학습 논문 4화] A3C 논문 리뷰(https://www.youtube.com/watch?v=lfaaGQcQ2FE)
 
 * A3C : Asynchronous Advantage Actor-Critic
+
+* 전체를 보여주는 이미지
+  * <image src="image/A3C.jpg" style="width:500px">
 
 * 개요
     * 1.샘플 사이의 상관관계를 비동기 업데이트로 해결
@@ -14,6 +17,14 @@
     * 4.상대적으로 빠른 학습 속도(여러 에이전트가 환경과 상호작용)
     * 즉, AC = 비동기 + `Actor-Critic`
       * `Actor-Critic`이라는 Agent와 환경을 여러개 만들어서 비동기적으로 업데이트 해나가는 것이 A3C이다.
+
+* Contribution
+  * 1.다양한 RL 알고리즘의 **"scale-up"** 방법을 제시!
+    * Off/on policy, Value/Policy based ... 모두에서 stable.
+    * Experience Replay 대신 병렬적 actor가 decorrelation 가능케 해준다. => RL을 Supervised Learning처럼 학습하기 위해 Experience Replay, Target Network 등을 사용하고 iid 가정이 존재한다. 하지만 위와 같은 iid 가정이 필요없는 방법을 사용함으로써 좀 더 자유로워짐.
+    * GPU 대신 CPU Thread를 사용.
+    * 심지어 Super Linear... => Actor-learner thread가 1개 있을때보다 16개 있을 때 학습속도가 16배가 되어야 하는데 이것이 Linear하다는 뜻. Super Linear는 학습속도가 1개 썼을때 보다 16배보다 더 빨라진다는 뜻!
+  * 2.SOTA 갱신! (State-Of-The-Art)
 
 * `Actor-Critic`은 무엇일까?
     * Actor-Critic = REINFORCE + 실시간 학습 ::: REINFORCE라는 알고리즘을 online으로 학습하는 것.
