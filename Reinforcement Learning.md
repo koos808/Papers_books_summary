@@ -10,7 +10,7 @@
 * A3C : Asynchronous Advantage Actor-Critic
 
 * 전체를 보여주는 이미지
-  * <image src="image/A3C.jpg" style="width:500px">
+  * <image src="image/A3C.png" style="width:500px">
 
 * 개요
     * 1.샘플 사이의 상관관계를 비동기 업데이트로 해결
