@@ -170,16 +170,16 @@
   * Stochastic policy : $\pi(a|s)$ ::: -> 어떤 state에서 action을 할 확률이 주어진다.
 
 * Background <br/><br/>
-  * <image src="image/DDPG.jpg" style="width:600px;">
+  * <image src="image/DDPG.png" style="width:600px;">
   * 설명 : 첫 번째 수식은 SARSA 알고리즘이다. $Q^\pi(s_t,a_t)$를 업데이트하기 위해서 $(s_0,a_0,r,s_1,a_1)$이 필요하다. 하지만 아래 수식에서는 target policy를 deterministic하게 만들어서 SARSA의 마지막 $a_1$(action)을 몰라도 되도록 만들었다. 즉, $(s_0,a_0,r,s_1)$만으로 $Q^\mu(s_t,a_t)$를 계산할 수 있다. 
   * Deterministic policy를 가정하기 전의 수식에서는 $a_{t+1}$을 골랐던 순간의 policy로 Q에 대한 Expection을 원래 구해야하기 때문에 off-policy가 아니지만, Determinsitic policy를 가정한다면 update 할 당시의 policy로 $a_{t+1}$를 구할 수 있기 때문에 off-policy가 된다. <br/><br/>
-  * <image src="image/DDPG2.jpg" style="width:600px;">
+  * <image src="image/DDPG2.png" style="width:600px;">
   * 그렇다면 DQN을 continuous action spaces에 바로 적용이 가능할까? NO!!
   * $\mu(s) = \argmax_aQ(s,a)$  => DQN에서는 diterministic policy($\mu(s)$)가 argmax로 주어진다. 그래서 action space는 high-dimension에서 max값을 찾는 `optimization problem`이 된다. 그런데 이는 (too slow to be practical) 하다. 따라서 DQN을 바로 continuous action space에 적용할 수 없다.
   * 위의 방법이 안되니까, `Actor-Critic Approach based on Deterministic Policy Gradient`를 써보자라는 식이다.
 
 * Actor-Critic
-  * <image src="image/DDPG3.jpg" style="width:600px;">
+  * <image src="image/DDPG3.png" style="width:600px;">
 
 * DDPG
   * <image src="image/DDPG4.png" style="width:500px;">
