@@ -4,6 +4,7 @@
 
 * 참고1 : RLCode와 A3C 쉽고 깊게 이해하기(https://www.youtube.com/watch?v=gINks-YCTBs&t=357s)
 * 참고2 : [쉽게읽는 강화학습 논문 4화] A3C 논문 리뷰(https://www.youtube.com/watch?v=lfaaGQcQ2FE)
+* 논문명 : Asynchronous Methods for Deep Reinforcement Learning(https://arxiv.org/abs/1602.01783)
 
 * A3C : Asynchronous Advantage Actor-Critic
 
@@ -18,13 +19,28 @@
     * 즉, AC = 비동기 + `Actor-Critic`
       * `Actor-Critic`이라는 Agent와 환경을 여러개 만들어서 비동기적으로 업데이트 해나가는 것이 A3C이다.
 
-* Contribution
+* **Contribution**
   * 1.다양한 RL 알고리즘의 **"scale-up"** 방법을 제시!
     * Off/on policy, Value/Policy based ... 모두에서 stable.
     * Experience Replay 대신 병렬적 actor가 decorrelation 가능케 해준다. => RL을 Supervised Learning처럼 학습하기 위해 Experience Replay, Target Network 등을 사용하고 iid 가정이 존재한다. 하지만 위와 같은 iid 가정이 필요없는 방법을 사용함으로써 좀 더 자유로워짐.
     * GPU 대신 CPU Thread를 사용.
     * 심지어 Super Linear... => Actor-learner thread가 1개 있을때보다 16개 있을 때 학습속도가 16배가 되어야 하는데 이것이 Linear하다는 뜻. Super Linear는 학습속도가 1개 썼을때 보다 16배보다 더 빨라진다는 뜻!
   * 2.SOTA 갱신! (State-Of-The-Art)
+
+* 논문에서 다루는 4가지 알고리즘
+  * One-step Q-learning(Value-based & off-policy)
+  * N-step Q-learning(Value-based & off-policy)
+  * One-step SARSA(Q-learning의 on-policy 버전)
+  * Advantage-Actor Critic(on-policy)
+
+* One-step Q-learning(Value-based & off-policy)
+  * ex) T=5 일 때마다 Update the target network $(\theta^- \leftarrow \theta)$
+  * Epsilon은 각 actor마다 다르게 설정할 수 있다. <br/><br/>
+  * <image src="image/A3C2.jpg" style="width:400px">
+
+* One-step SARSA(Q-learning의 on-policy 버전 -> 내 policy의 action이 target을 정하는데 쓰임.)
+  * 위의 Q-learning과 모두 동일하고, Q의 target value { $r+\gamma max_{a'}Q(s',a';\theta^-)$ }만 { $r+\gamma Q(s',a';\theta')$ } 이렇게 바꾸면 SARSA Version이 된다.
+  * 즉, TD-target만 바뀌면 된다.
 
 * `Actor-Critic`은 무엇일까?
     * Actor-Critic = REINFORCE + 실시간 학습 ::: REINFORCE라는 알고리즘을 online으로 학습하는 것.
