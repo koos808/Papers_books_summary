@@ -122,10 +122,10 @@
 
 * 간단 요약
   * `Actor`
-    * 1) 정책(Policy)을 근사 : $\theta$
+    * 1) 정책(Policy)을 근사 : $\theta$, 실제로 행동하는 Actor network
     * 2) $\nabla_\theta log\pi_\theta (a_t|s_t)(r_{t+1} + \gamma V_v(s_{t+1})-V_v(s_t))$로 업데이트
   * `Critic`
-    * 가치함수(Value function)을 근사 : $v$
+    * 가치함수(Value function)을 근사 : $v$, $Q(s,a)$[가치를 평가하는 critic network]
     * $(r_{t+1} + \gamma V_v(s_{t+1})-V_v(s_t))^2$의 loss function으로 업데이트
 
 * `A3C`
@@ -143,10 +143,11 @@
 ---
 
 * 참고 1 : PR-019: Continuous Control with Deep Reinforcement Learning(https://www.youtube.com/watch?v=h2WSVBAC1t4)
+* 참고 2 : https://reinforcement-learning-kr.github.io/2018/06/26/3_ddpg/
 * 논문 : Continuous Control with Deep Reinforcement Learning(https://arxiv.org/abs/1509.02971)
 
 * 개요
-  * `DDPG(Deep Deterministic Policy Gradient)`는 DPG에 DQN을 결합시킨 **model-free off-policy actor-critic algorithm**이다. DQN(Deep Q-Network)는 experience replay와 frozen target network를 통해서 Q-network에 대한 학습을 안정화시켰다. 원래 DQN은 discrete space상에서 동작하지만, DDPG는 actor-critic framework를 활용하여 deterministic policy를 학습하면서 ㅎ과를 continuous space까지로 확장시켰다.
+  * `DDPG(Deep Deterministic Policy Gradient)`는 DPG에 DQN을 결합시킨 **model-free off-policy actor-critic algorithm**이다. DQN(Deep Q-Network)는 experience replay와 frozen target network를 통해서 Q-network에 대한 학습을 안정화시켰다. 원래 DQN은 discrete space상에서 동작하지만, DDPG는 actor-critic framework를 활용하여 deterministic policy를 학습하면서 효과를 continuous space까지로 확장시켰다.
 
 * DQN
   * high-dimensional observation spaces
@@ -165,6 +166,35 @@
 
 * Policy
   * $\pi, \mu$ = policy
-  * `Deterministic` policy : $a=\mu(s)$
-  * Stochastic policy : $\pi(a|s)$
-  * 
+  * `Deterministic` policy : $a=\mu(s)$ ::: -> 즉, 어떤 state에서 항상 어떤 action을 하게 된다. 
+  * Stochastic policy : $\pi(a|s)$ ::: -> 어떤 state에서 action을 할 확률이 주어진다.
+
+* Background <br/><br/>
+  * <image src="image/DDPG.jpg" style="width:600px;">
+  * 설명 : 첫 번째 수식은 SARSA 알고리즘이다. $Q^\pi(s_t,a_t)$를 업데이트하기 위해서 $(s_0,a_0,r,s_1,a_1)$이 필요하다. 하지만 아래 수식에서는 target policy를 deterministic하게 만들어서 SARSA의 마지막 $a_1$(action)을 몰라도 되도록 만들었다. 즉, $(s_0,a_0,r,s_1)$만으로 $Q^\mu(s_t,a_t)$를 계산할 수 있다. 
+  * Deterministic policy를 가정하기 전의 수식에서는 $a_{t+1}$을 골랐던 순간의 policy로 Q에 대한 Expection을 원래 구해야하기 때문에 off-policy가 아니지만, Determinsitic policy를 가정한다면 update 할 당시의 policy로 $a_{t+1}$를 구할 수 있기 때문에 off-policy가 된다. <br/><br/>
+  * <image src="image/DDPG2.jpg" style="width:600px;">
+  * 그렇다면 DQN을 continuous action spaces에 바로 적용이 가능할까? NO!!
+  * $\mu(s) = \argmax_aQ(s,a)$  => DQN에서는 diterministic policy($\mu(s)$)가 argmax로 주어진다. 그래서 action space는 high-dimension에서 max값을 찾는 `optimization problem`이 된다. 그런데 이는 (too slow to be practical) 하다. 따라서 DQN을 바로 continuous action space에 적용할 수 없다.
+  * 위의 방법이 안되니까, `Actor-Critic Approach based on Deterministic Policy Gradient`를 써보자라는 식이다.
+
+* Actor-Critic
+  * <image src="image/DDPG3.jpg" style="width:600px;">
+
+* DDPG
+  * <image src="image/DDPG4.jpg" style="width:500px;">
+  * $(s_1,a_t,r_t,s_{t+1})$이 있으면 Q-function을 업데이트할 수 있으니, 이를 replay buffer $R$에다가 넣어둔다.
+  * $R$에서 $N$개의 mini-batch size만큼을 뽑아서 target 값 $y_i$를 계산한다.
+  * 그리고 loss function을 적용해 critic과 actor policy를 업데이트한다.
+  * DDPG 알고리즘 특징
+    * Replay buffer 사용 : DDPG는 DQN에서 사용된 Replay buffer를 사용하여 online batch update를 가능하게 한다.
+    * “soft” target update 사용 : DQN에서는 일정 주기마다 origin network의 weight를 target network로 직접 복사해서 사용했는데, DDPG에서는 exponential moving average(지수이동평균)식으로 대체한다. stochatic gradient descent와 같이 급격하게 학습이 진행되는 것을 막기 위해 사용하는 것 같다.
+    * 각 차원의 scale이 다른 low dimension vector로부터 학습할 때 Batch Normalization을 사용 => 서로 scale이 다른 feature를 state로 사용할 때에 Neural Net이 일반화에서 어려움을 겪는데, 해결하기 위해 스케일을 조정했다.
+    * 탐험을 위해 action에 Noise를 추가 => ORNSTEIN UHLENBECK PROCESS(OU)을 사용했는데 OU Process는 평균으로 회귀하는 random process이다. ( $dxt=θ(μ−x_t)dt+σdW_t$)
+      *  θ 는 얼마나 빨리 평균으로 회귀할 지를 나타내는 파라미터이며 μ는 평균을 의미함
+      *  σ는 process의 변동성을 의미하며 Wt는 Wiener process를 의미함
+
+* DDPG 다이어그램
+  * <image src="image/DDPG5.png" style="width:600px;">
+
+
