@@ -222,39 +222,55 @@
     * $\rho_0$ : 시작할 때 어느 state에서 시작하는지의 분포
   * Policy
     * $\pi$ : state에서 action을 할 확률(0 ~ 1 사이의 값) <br/>
-  * <image src="image/TRPO.PNG" style="width:300px;">
+  * <image src="image/TRPO.PNG" style="width:400px;">
   * $\eta(\pi)$ : Policy가 받을 return의 기댓값임. 즉, Policy의 성능을 나타내는 수식 
   * $Q_\pi(s_t,a_t)$ : t state에서 action을 할 때, 그때부터 추가로 받을 dicount reward의 합의 기대값이다.
   * $V_\pi(s_t)$ : t state에서 끝날 때까지 받는 reward 합의 기대값이다.
 
 * 2.모든 것의 출발점 : Kakade & Langford
-  * <image src="image/TRPO2.PNG" style="width:300px">
+  * <image src="image/TRPO2.PNG" style="width:400px">
   * $\eta(\tilde{\pi})$는 $\eta(\pi)$ + 어드벤티지의 기대값이다. ★☆★☆
   * 위의 말을 쉽게 설명하면, $\pi$의 어드벤지티를 $\tilde{\pi}$의 경로(trajectory)에다가 가중치합을 했을 때 $\tilde{\pi}$의 성능이 나오게 된다라는 의미이다. 아래 그림은 예시이다. <br/><br/>
-  * <image src="image/TRPO3.PNG" style="width:300px">
+  * <image src="image/TRPO3.PNG" style="width:400px">
   * 위 그림에서 $\eta(\tilde{\pi})$를 구할 때, $\tilde{\pi}$의 확률을 쓰고, Advantage 값은 $\pi$ 값을 쓴다. 즉, 다른 Policy의 성능을 알고 싶을 때, 아는 Policy로부터 구할 수 있다. 
   * 증명 :  <image src="image/TRPO4.PNG" style="width:400px">
   * Discounted visitation frequency는 state에 있을 확률을 $\gamma$를 취해서 모두 더한 값이다. 그렇게 되면 에피소드동안 state(s)에 있을 확률이 구해지게 된다. (unnormalized) -> 이 확률은 1이 넘을 수 있다. 
-  * <image src="image/TRPO5.PNG" style="width:300px">
-  * <image src="image/TRPO6.PNG" style="width:300px">
-  * <image src="image/TRPO7.PNG" style="width:300px">
-  * <image src="image/TRPO8.PNG" style="width:300px">
+  * <image src="image/TRPO5.PNG" style="width:400px">
+  * <image src="image/TRPO6.PNG" style="width:400px">
+  * <image src="image/TRPO7.PNG" style="width:400px">
+  * <image src="image/TRPO8.PNG" style="width:400px">
 
 * 3.General한 improvement guarantee
   * Total variation divergence 개념을 도입(두 확률분포 사이의 얼마나 다른지의 개념)
   * $D_{TV}(p\;||\;q)={1\over2}\sum_i|p_i-q_i|$ <br><br>
-  * <image src="image/TRPO9.PNG" style="width:300px">
+  * <image src="image/TRPO9.PNG" style="width:400px">
   * p와 q는 확률분포를 의미하고, $D_{TV}$는 p와 q가 얼마나 다른지를 나타내주는 값임. 두 확률분포가 같으면 $D_{TV}$는 0이다. <br><br>
-  * <image src="image/TRPO10.PNG" style="width:300px">
-  * <image src="image/TRPO11.PNG" style="width:300px">
-  * <image src="image/TRPO12.PNG" style="width:300px">
+  * <image src="image/TRPO10.PNG" style="width:400px">
+  * <image src="image/TRPO11.PNG" style="width:400px">
+  * <image src="image/TRPO12.PNG" style="width:400px">
   * Algorithm 1 : Policy iteration algorithm quarantteeing non-decreasing expected return $\eta$
   * Policy의 성능을 의미하는 $\eta$가 줄어들지 않는 것을 보장해 준다. 매번 업데이트할 때 유지하거나 늘어나거나 improvement를 guaranteeing(보장)한다.
-  * <image src="image/TRPO13.PNG" style="width:300px">
+  * <image src="image/TRPO13.PNG" style="width:400px">
 
-* 4.보다 practical한 알고리즘
-  * <image src="image/TRPO14.PNG" style="width:300px">
-  * <image src="image/TRPO15.PNG" style="width:300px;">
+* 4.보다 practical(실용적)한 알고리즘
+  * <image src="image/TRPO14.PNG" style="width:400px">
+  * <image src="image/TRPO15.PNG" style="width:400px;"> 
+  * $C$는 이론적으로 유도된 숫자이기 때문에 너무 커서 실제로 사용할 수가 없다. 즉 penalty가 너무 커서 step size가 매우 작아질 수 밖에 없다. 따라서 이 penalty형태를 constraint 형태($subject \; to\; D^{max}_{KL}(\theta_{old},\theta) \leq \delta$ )로 변경해준다.(최적화) <br/><br/>
+  * <image src="image/TRPO16.PNG" style="width:400px;">
+  * $D^{max}_{KL}(\theta_{old},\theta)$를 구할 수 없어서 $\bar{D}^{\rho}_{KL}(\theta_1,\theta_2)$를 사용한다. 각 state별 KL Divergence의 평균을 나타낸다.
 
+* 5.샘플 기반의 objective and constraint estimation
+  * <image src="image/TRPO17.PNG" style="width:400px;">
+  * <image src="image/TRPO19.PNG" style="width:400px;">
+  * <image src="image/TRPO18.PNG" style="width:400px;">
+  * 위의 과정을 통해 Expectation 형태로 만들어준 것이다.
+  * 에피소드(Trajectory)를 만들어서 샘플값을 구한다음 위의 수식들을 도출하면 된다.
+  * 샘플들을 뽑는 방법은 2가지를 제시했다. **Sing Path**와 **Vine**!!
+  * <image src="image/TRPO20.PNG" style="width:400px;">
+  * <image src="image/TRPO21.PNG" style="width:400px;"> <br/>
+    * 1.**Sing Path**와 **Vine**의 procedure를 이용해서 state-action pair set을 모은다. 그리고 Q-value의 몬테카를로 estimate도 모은다.
+    * 2.그리고 그 샘플들의 평균을 계산하고, objective와 constraint의 estimate 값을 구한다.
+    * 3.constraint optimization 문제를 푼다.(생략)
 
-
+* 요약
+  * <image src="image/TRPO22.PNG" style="width:400px;">
