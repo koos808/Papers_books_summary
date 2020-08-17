@@ -205,6 +205,9 @@
 * 참고2 : [쉽게읽는 강화학습 논문 5화] TRPO 논문 리뷰(https://reinforcement-learning-kr.github.io/2018/06/24/5_trpo/)
 * 논문명 : Asynchronous Methods for Deep Reinforcement Learning(https://arxiv.org/abs/1502.05477)
 
+* 개요 및 contribution
+  * DQN보다 성능이 엄청좋다 이런 것이 아니라, 이론적으로 안전하게 policy를 최적화할 수 있는 수식을 유도하고 그 수식에 여러 근사치를 넣어서 practical하게 쓸 수 있게 알고리즘을 만들었다. 또한 이 알고리즘은 잘 작동했다. (새로운 방법론 및 알고리즘 제시)
+
 * Index
   * 준비 운동(Preliminaries)
   * 모든 것의 출발점 : Kakade & Langford
