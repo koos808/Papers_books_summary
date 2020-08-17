@@ -222,7 +222,7 @@
     * $\rho_0$ : 시작할 때 어느 state에서 시작하는지의 분포
   * Policy
     * $\pi$ : state에서 action을 할 확률(0 ~ 1 사이의 값) <br/>
-  * <image src="image/TRPO.png" style="width:560px">
+  * <image src="image/TRPO.png" style="width:560px;">
   * $\eta(\pi)$ : Policy가 받을 return의 기댓값임. 즉, Policy의 성능을 나타내는 수식 
   * $Q_\pi(s_t,a_t)$ : t state에서 action을 할 때, 그때부터 추가로 받을 dicount reward의 합의 기대값이다.
   * $V_\pi(s_t)$ : t state에서 끝날 때까지 받는 reward 합의 기대값이다.
