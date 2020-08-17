@@ -228,33 +228,33 @@
   * $V_\pi(s_t)$ : t state에서 끝날 때까지 받는 reward 합의 기대값이다.
 
 * 2.모든 것의 출발점 : Kakade & Langford
-  * <image src="image/TRPO2.png" style="width:560px">
+  * <image src="image/TRPO2.PNG" style="width:560px">
   * $\eta(\tilde{\pi})$는 $\eta(\pi)$ + 어드벤티지의 기대값이다. ★☆★☆
   * 위의 말을 쉽게 설명하면, $\pi$의 어드벤지티를 $\tilde{\pi}$의 경로(trajectory)에다가 가중치합을 했을 때 $\tilde{\pi}$의 성능이 나오게 된다라는 의미이다. 아래 그림은 예시이다. <br/><br/>
-  * <image src="image/TRPO3.png" style="width:560px">
+  * <image src="image/TRPO3.PNG" style="width:560px">
   * 위 그림에서 $\eta(\tilde{\pi})$를 구할 때, $\tilde{\pi}$의 확률을 쓰고, Advantage 값은 $\pi$ 값을 쓴다. 즉, 다른 Policy의 성능을 알고 싶을 때, 아는 Policy로부터 구할 수 있다. 
-  * 증명 :  <image src="image/TRPO4.png" style="width:400px">
+  * 증명 :  <image src="image/TRPO4.PNG" style="width:400px">
   * Discounted visitation frequency는 state에 있을 확률을 $\gamma$를 취해서 모두 더한 값이다. 그렇게 되면 에피소드동안 state(s)에 있을 확률이 구해지게 된다. (unnormalized) -> 이 확률은 1이 넘을 수 있다. 
-  * <image src="image/TRPO5.png" style="width:500px">
-  * <image src="image/TRPO6.png" style="width:500px">
-  * <image src="image/TRPO7.png" style="width:500px">
-  * <image src="image/TRPO8.png" style="width:500px">
+  * <image src="image/TRPO5.PNG" style="width:500px">
+  * <image src="image/TRPO6.PNG" style="width:500px">
+  * <image src="image/TRPO7.PNG" style="width:500px">
+  * <image src="image/TRPO8.PNG" style="width:500px">
 
 * 3.General한 improvement guarantee
   * Total variation divergence 개념을 도입(두 확률분포 사이의 얼마나 다른지의 개념)
   * $D_{TV}(p\;||\;q)={1\over2}\sum_i|p_i-q_i|$ <br><br>
-  * <image src="image/TRPO9.png" style="width:500px">
+  * <image src="image/TRPO9.PNG" style="width:500px">
   * p와 q는 확률분포를 의미하고, $D_{TV}$는 p와 q가 얼마나 다른지를 나타내주는 값임. 두 확률분포가 같으면 $D_{TV}$는 0이다. <br><br>
-  * <image src="image/TRPO10.png" style="width:500px">
-  * <image src="image/TRPO11.png" style="width:500px">
-  * <image src="image/TRPO12.png" style="width:500px">
+  * <image src="image/TRPO10.PNG" style="width:500px">
+  * <image src="image/TRPO11.PNG" style="width:500px">
+  * <image src="image/TRPO12.PNG" style="width:500px">
   * Algorithm 1 : Policy iteration algorithm quarantteeing non-decreasing expected return $\eta$
   * Policy의 성능을 의미하는 $\eta$가 줄어들지 않는 것을 보장해 준다. 매번 업데이트할 때 유지하거나 늘어나거나 improvement를 guaranteeing(보장)한다.
-  * <image src="image/TRPO13.png" style="width:500px">
+  * <image src="image/TRPO13.PNG" style="width:500px">
 
 * 4.보다 practical한 알고리즘
-  * <image src="image/TRPO14.png" style="width:400px">
-  * <image src="image/TRPO15.png" style="width:400px;">
+  * <image src="image/TRPO14.PNG" style="width:400px">
+  * <image src="image/TRPO15.PNG" style="width:400px;">
 
 
 
