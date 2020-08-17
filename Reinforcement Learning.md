@@ -254,7 +254,7 @@
 
 * 4.보다 practical한 알고리즘
   * <image src="image/TRPO14.png" style="width:400px">
-  * <image src="image/TRPO15.png" style="width:400px">
+  * <image src="image/TRPO15.png" style="width:400px;">
 
 
 
