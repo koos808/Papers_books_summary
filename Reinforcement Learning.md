@@ -277,3 +277,28 @@
 
 * 요약
   * <image src="image/TRPO22.PNG" style="width:400px;">
+
+## PPOP : Proximal Policy Optimization(2017, OpenAI)
+---
+
+* 참고1 : [쉽게읽는 강화학습 논문 6화] PPO 논문 리뷰(https://www.youtube.com/watch?v=L-QYXtJmXrc)
+* 논문명 : Proximal Policy Optimization Algorithms(https://arxiv.org/abs/1707.06347)
+
+* Idea
+  * TRPO와 같은 질문으로부터 출발 : `지금 얻은 데이터로 가능한 큰 STEP만큼 update하고 싶은데.. 그렇다고 너무 멀리 가서 성능을 떨어뜨리고 싶지도 않은데.. 어떻게 하면 좋을까?`
+  * TRPO는 이 문제를 복잡한 second-order method(이차미분)로 풀려고 했다.
+    * 얼만큼 업데이트해야 안전한가, penalty term과 constraint term 등이 있었다.
+    * PPO는 first-order 방법론이다.
+    * 트릭을 사용하여 새로운 policy를 기존의 policy와 가깝도록 유지하게 해준다.
+    * 굉장히 구현이 간단하며, 실증적으로도 좋은 성능을 보여준다.
+
+
+* <image src="image/PPO1.PNG" style="width:400px;">
+* <image src="image/PPO2.PNG" style="width:400px;">
+* <image src="image/PPO3.PNG" style="width:400px;">
+* <image src="image/PPO4.PNG" style="width:400px;">
+
+* PPO의 첫번째 형태
+  * <image src="image/PPO5.PNG" style="width:400px;">
+  * $epsilon(\epsilon)$
+  * $r_t(\theta)$를 $(1-\epsilon ,1+\epsilon)$ 사이로 Clip한다.
