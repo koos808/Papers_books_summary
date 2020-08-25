@@ -281,22 +281,59 @@
 ## PPO : Proximal Policy Optimization(2017, OpenAI)
 ---
 
-* 참고1 : [쉽게읽는 강화학습 논문 6화] PPO 논문 리뷰(https://www.youtube.com/watch?v=L-QYXtJmXrc)
+* 참고 1 : [쉽게읽는 강화학습 논문 6화] PPO 논문 리뷰(https://www.youtube.com/watch?v=L-QYXtJmXrc)
+* 참고 2 : [MC러닝의 강화학습 연구소] OpenAI Spinning UP 번역] Proximal Policy Optimization (https://mclearninglab.tistory.com/145) 
 * 논문명 : Proximal Policy Optimization Algorithms(https://arxiv.org/abs/1707.06347)
 
 * Idea
   * TRPO와 같은 질문으로부터 출발 : `지금 얻은 데이터로 가능한 큰 STEP만큼 update하고 싶은데.. 그렇다고 너무 멀리 가서 성능을 떨어뜨리고 싶지도 않은데.. 어떻게 하면 좋을까?`
   * TRPO는 이 문제를 복잡한 second-order method(이차미분)로 풀려고 했다.
     * 얼만큼 업데이트해야 안전한가, penalty term과 constraint term 등이 있었다.
-    * PPO는 first-order 방법론이다.
+    * PPO는 first-order 방법론이며 on-policy알고리즘이다.
     * 트릭을 사용하여 새로운 policy를 기존의 policy와 가깝도록 유지하게 해준다.
     * 굉장히 구현이 간단하며, 실증적으로도 좋은 성능을 보여준다.
   * TRPO는 2차 근사까지 보는데 PPO 논문에서는 1차 근사까지만 본다.
 
-* <image src="image/PPO1.PNG" style="width:400px;">
-* <image src="image/PPO2.PNG" style="width:400px;">
-* <image src="image/PPO3.PNG" style="width:400px;">
-* <image src="image/PPO4.PNG" style="width:400px;">
+* Background
+  * PPO는 현재 가지고 있는 데이터로 성능을 떨어뜨리지 않으면서 정책을 개선시키는 step을 가능한 멀리 밟도록하려면 어떻게 해야하는 지에 대해 고민했다는 점에서 TRPO와 같습니다. TRPO는 복잡한 2차 근사(second-order) 방법으로 해결했다면, PPO는 이전 정책과 새로운 정책이 가깝게 유지하도록 약간 트릭을 사용한 선형 근사(first-order) 방법으로 구현이 더 간단하면서도, 최소한 TRPO만큼의 성능을 보이는 것 같습니다.
+  * PPO는 PPO-penalty와 PPO-Clip 두 가지 방식이 있습니다.
+  * PPO-Penalty는 TRPO처럼 KL-constrained 업데이트로 근사해서 풀지만, 제한하는 것 대신 목적 함수에서 KL-divergence에 패널티를 주는 방식을 택했고 이를 위한 패널티 계수를 학습하면서 자동으로 크기를 조정합니다.
+  * PPO-Clip은 KL-divergence가 목적함수에도, constraint에도 전혀 없습니다. 대신 목적 함수에 특별한 clipping으로 새로운 정책이 이전 정책에서 멀어지지 않도록 합니다.
+
+* Quick Facts
+  * PPO는 on-policy 알고리즘입니다.
+  * PPO는 discrete하거나 continuous한 action space를 가진 환경에서 사용할 수 있습니다.
+  * Spinning UP 구현에서는 MPI를 이용한 병렬화(parallelization)를 지원합니다.
+
+* 주요 방정식(Key Equations)
+  * PPO-clip은 다음을 통해 정책을 업데이트 합니다.
+    * <image src="image/PPO11.PNG" style="width:250px;">
+  * 보통 미니배치를 사용해 SGD으로 여러 학습하여 목적함수를 최대화하도록 합니다. 여기서 $L$ 다음과 같습니다.
+    * <image src="image/PPO12.PNG" style="width:400px;">
+  * ϵ은 이전 정책보다 새로운 정책이 얼마나 더 많이 변해도 될지 정해주는 (작은 값의) 하이퍼파라미터(hyperparameter) 정도로 볼 수 있습니다.
+  * 꽤 복잡해 보이고 처음 보기엔 뭐가 어떻게 돌아가는지, 새로운 정책이 이전 정책과 어떻게 가깝게 유지하도록 해주는 건지 잘 모를 수 있습니다. 찾아보면 이보다 더 다루기 쉽게 상당히 단순화된 형태가 있습니다. (OpenAI code에서도 이와 같이 구현되어 있습니다.)
+    * <image src="image/PPO13.PNG" style="width:400px;">
+    * 이 때 $g$는 다음과 같습니다.
+    * <image src="image/PPO14.PNG" style="width:250px;">
+  * 이에 담겨있는 직관을 얻기 위해 어떤 한 상태-행동 쌍$(s,a)$이 있다고 생각해봅시다. (그래서 어떤 Advantage 값이 나왔다고 해봅시다.)
+  * **Advantage가 양수인 경우** : Advantage가 양수인 경우 다음과 같이 목적함수를 줄일 수 있습니다.
+    * <image src="image/PPO15.PNG" style="width:350px;">
+    * advantage가 양수이기 때문에, 행동을 더 자주한다면, 즉 $π_θ(a|s)$가 증가한다면 목적함수도 증가할겁니다. 하지만 min 항이 이러한 목적함수의 증가를 제한하고 있습니다. $πθ(a|s) > (1+ϵ)π_{θ_k}(a|s)$라면, min은 $(1+ϵ)A^{π_{θ_k}}(s,a)$라는 값을 갖도록 할겁니다. 결국, 새로운 정책은 이전 정책보다 멀리 가도 더 특별한 이득이 없게 됩니다.
+  * **Advantage가 음수인 경우** : Advantage가 음수인 경우 다음과 같이 목적함수를 줄일 수 있습니다.
+    * <image src="image/PPO16.PNG" style="width:350px;">
+    * advantage가 음수이기 때문에, 행동을 덜 하게 된다면, 즉 $π_θ(a|s)$가 감소한다면 목적함수는 증가할겁니다. 하지만 max 항이 이러한 목적함수의 증가를 제한하고 있습니다. $πθ(a|s) <> (1+ϵ)π_{θ_k}(a|s)$ 라면, max은 $(1-ϵ)A^{π_{θ_k}}(s,a)$라는 값을 갖도록 할겁니다. 결국, 새로운 정책은 이전 정책보다 멀리 가도 더 특별한 이득이 없게 됩니다.
+
+* Clipping
+  * 이러한 clipping은 장기적으로 의미있는 정책 업데이트를 할 수 있도록 해주지만, 새로운 정책이 이전 정책보다 과하게 멀리 떨어질 가능성은 여전히 있습니다. 그래서 이를 피하기 위한 다른 PPO 구현 트릭들이 많이 사용되고 있습니다. 여기 구현에서는 특히 간단한 방법을 사용하는데, 바로 early stopping입니다. 이전 정책과 새로운 정책의 KL-divergence가 일정 기준치(threshold)를 넘어가게 되면, 학습을 멈추는 방법이죠.
+
+* 의사 코드(Pseudo code)
+* <image src="image/PPO17.PNG" style="width:450px;">
+
+* Background 이어서..
+  * <image src="image/PPO1.PNG" style="width:400px;">
+  * <image src="image/PPO2.PNG" style="width:400px;">
+  * <image src="image/PPO3.PNG" style="width:400px;">
+  * <image src="image/PPO4.PNG" style="width:400px;">
 
 * PPO의 첫 번째 방법 ::: PPO Clipped <- 실험적으로는 첫번 째 방법이 더 좋음
   * <image src="image/PPO5.PNG" style="width:400px;">
@@ -311,6 +348,7 @@
   * $\epsilon$은 하이퍼파라메터여서 0.2나 0.1 등등 해보면 된다.
   * <image src="image/PPO6.PNG" style="width:400px;">
     * N개의 Actor들이 environment안에서 T timestep만큼 policy를 실행한다. 예를 들어 100개의 Actor가 있고 각 Actor들이 50 step만큼 action을해서 데이터를 쌓으면 100x50만큼 데이터가 쌓인다. 5000개의 각 timestep마다 Advantage를 계산한다. 그리고 SGD나 Adam 등을 사용해서 $L^{clip}$ function을 optimize하면 된다. 이러한 과정을 여러번 하면 된다.
+
 
 * PPO의 두 번째 방법 ::: Adaptive KL Penalty
   * <image src="image/PPO7.PNG" style="width:400px;">
