@@ -278,7 +278,7 @@
 * 요약
   * <image src="image/TRPO22.PNG" style="width:400px;">
 
-## PPOP : Proximal Policy Optimization(2017, OpenAI)
+## PPO : Proximal Policy Optimization(2017, OpenAI)
 ---
 
 * 참고1 : [쉽게읽는 강화학습 논문 6화] PPO 논문 리뷰(https://www.youtube.com/watch?v=L-QYXtJmXrc)
@@ -291,14 +291,35 @@
     * PPO는 first-order 방법론이다.
     * 트릭을 사용하여 새로운 policy를 기존의 policy와 가깝도록 유지하게 해준다.
     * 굉장히 구현이 간단하며, 실증적으로도 좋은 성능을 보여준다.
-
+  * TRPO는 2차 근사까지 보는데 PPO 논문에서는 1차 근사까지만 본다.
 
 * <image src="image/PPO1.PNG" style="width:400px;">
 * <image src="image/PPO2.PNG" style="width:400px;">
 * <image src="image/PPO3.PNG" style="width:400px;">
 * <image src="image/PPO4.PNG" style="width:400px;">
 
-* PPO의 첫번째 형태
+* PPO의 첫 번째 방법 ::: PPO Clipped <- 실험적으로는 첫번 째 방법이 더 좋음
   * <image src="image/PPO5.PNG" style="width:400px;">
   * $epsilon(\epsilon)$
   * $r_t(\theta)$를 $(1-\epsilon ,1+\epsilon)$ 사이로 Clip한다.
+  * Clipped Loss와 Original Loss 중에 둘 중에 작은 것을 사용하자. 그러면 그게 원래 Loss의 Lower bound가 된다.
+  * 위 그림 왼쪽 그래프에서 보면 **빨간점**이 의미하는 것은 업데이트가 시작되는 지점이다. ($\theta_{old}$와 $\theta$가 같은 지점이다. 즉 r이 1인 지점)
+  * $L^{clip}$ 함수가 r에 대해서 어떻게 변화하나 확인하는데, A>0 인 지점에서는 r을 1보다 크게 하려고 업데이트를 할 것이다. 그런데 $1+\epsilon$ 이상 키울 수 없도록 만들어 주는 것이다.
+  * A<0 인 지점에서는 r을 1보다 줄이려고 할 것이다. r이 action을 할 확률인데, 이전보다 좀 덜하게 해야하니까 r을 1보다 줄이려고 한다. 그리고 줄이는 하한선은 $1-\epsilon$ 까지로 정하는 것이다.
+  * 즉, r이 너무 급변하지 않도록 하는 것.
+  * penalty와 constraint가 없으며, 위의 loss만 받아서 업데이트하면 된다.
+  * $\epsilon$은 하이퍼파라메터여서 0.2나 0.1 등등 해보면 된다.
+  * <image src="image/PPO6.PNG" style="width:400px;">
+    * N개의 Actor들이 environment안에서 T timestep만큼 policy를 실행한다. 예를 들어 100개의 Actor가 있고 각 Actor들이 50 step만큼 action을해서 데이터를 쌓으면 100x50만큼 데이터가 쌓인다. 5000개의 각 timestep마다 Advantage를 계산한다. 그리고 SGD나 Adam 등을 사용해서 $L^{clip}$ function을 optimize하면 된다. 이러한 과정을 여러번 하면 된다.
+
+* PPO의 두 번째 방법 ::: Adaptive KL Penalty
+  * <image src="image/PPO7.PNG" style="width:400px;">
+  * $L^{KLPEN}(\Theta)$ :: KL divergence penalty
+  * $\beta$를 adaptive하게 계속 바꿔준다. KL divergence 값 $d$이 $d_{target}$보다 많이 작아지면 KL divergence가 많이 안벌어진 것을 의미하므로 $\beta$를 줄여주는 것. 
+  * 즉, KL divergnece가 너무 높았으면 $\beta$를 키우고, KL divergnece가 너무 작았으면 $\beta$를 줄이는 것이다.
+  * KL divergnece가 너무 높았다는 것은 policy가 너무 많이 변했다는 것이므로 KL penalty를 많이 주어야 한다.
+
+* PPO 실험
+  * <image src="image/PPO8.PNG" style="width:400px;">
+  * <image src="image/PPO9.PNG" style="width:400px;">
+  * <image src="image/PPO10.PNG" style="width:400px;">
