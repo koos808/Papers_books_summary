@@ -1,5 +1,21 @@
 # 강화학습
 
+
+## On-policy와 Off-policy의 차이
+---
+
+* 참고 1: https://newsight.tistory.com/250
+
+* `On-policy` 
+  * 학습하는 policy와 행동하는 policy가 반드시 같아야만 학습이 가능한 강화학습 알고리즘.
+  * ex) Sarsa
+  * on-policy의 경우 1번이라도 학습을 해서 policy improvement를 시킨 순간, 그 policy가 했던 과거의 experience들은 모두 사용이 불가능하다. 즉 매우 데이터 효율성이 떨어진다. 한 번 exploration해서 얻은 experience를 학습하고나면 그냥은 재사용이 불가능하다.(Importance sampling등을 해야 재사용가능 함.)
+
+* `Off-policy`
+  * 학습하는 policy와 행동하는 policy가 반드시 같지 않아도 학습이 가능한 알고리즘.
+  * ex) Q-learning
+  * off-policy는 현재 학습하는 policy가 과거에 했던 experience도 학습에 사용이 가능하고, 심지어는 해당 policy가 아니라 예를 들어 사람이 한 데이터로부터도 학습을 시킬 수가 있다.
+
 ## A3C : Asynchronous Advantage Actor-Critic(Mnih et al., 2016)
 ---
 
@@ -283,6 +299,7 @@
 
 * 참고 1 : [쉽게읽는 강화학습 논문 6화] PPO 논문 리뷰(https://www.youtube.com/watch?v=L-QYXtJmXrc)
 * 참고 2 : [MC러닝의 강화학습 연구소] OpenAI Spinning UP 번역] Proximal Policy Optimization (https://mclearninglab.tistory.com/145) 
+* 참고 3 : 수학으로 풀어보는 강화학습 원리와 알고리즘 PPO 부분
 * 논문명 : Proximal Policy Optimization Algorithms(https://arxiv.org/abs/1707.06347)
 
 * Idea
