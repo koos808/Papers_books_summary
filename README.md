@@ -98,11 +98,6 @@ Papers & Books Summary Repository
 * 마르코프 의사 결정
     * 마르코프 의사 결정 과정은 다음 상태 의 확률은 오직 현재의 상태 와 현재의 행동 에만 영향을 받고, 이전의 상태와 행동에는 영향을 받지 않는 마르코프 가정을 기반으로 합니다.
 * 차감된 미래의 리워드(Discounted Future Reward)
-    * 
-
-
-
-
 
 </br>
 
