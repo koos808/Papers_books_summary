@@ -275,3 +275,12 @@ preserved.
      * “`The computer` when I had just put into the machine room on the fifth floor `crashed.`”
    * ✓ We can often get away with N-gram model
 
+---
+# *※ STEP 4 : Text Representation 1 - Count-based Representations *
+### 강의 영상 : https://www.youtube.com/watch?v=DMNUVGbLp-0&list=PLetSlH8YjIfVzHuSXtG4jAC2zbEAErXWm&index=7&ab_channel=KoreaUnivDSBA
+
+* INDEX
+  * Bag of Words
+  * Word Weighting
+  * N-Grams
+
