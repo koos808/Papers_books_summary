@@ -340,10 +340,8 @@ preserved.
 
 
 ---
-# *※ STEP 5 : Text Representation II Distributed Representations *
+# *※ STEP 5 : Text Representation II Distributed Representations - Part1*
 ### 강의 영상 : https://www.youtube.com/watch?v=bvSHJG-Fz3Y&list=PLetSlH8YjIfVzHuSXtG4jAC2zbEAErXWm&index=8&ab_channel=KoreaUnivDSBA
-
-Lecture 5: Text Representation II Distributed Representations
 
 * INDEX
   * Word-level : NNLM
@@ -353,22 +351,81 @@ Lecture 5: Text Representation II Distributed Representations
   * Sentence/Paragraph/Document-level
   * More Things to Embed?
 
-### ✓ Distributed Representation: Word Embedding
+### ✓ 1. Distributed Representation: Word Embedding
 
 * Word Embedding
   * The purpose of word embedding is `to map the words in a language into a vector space` so that <U>semantically similar words are located close to each other</U>.
   * 단어를 특정한 vector space로 매핑시키는 것인데, 의미적으로 유사한 단어는 서로 가까운 공간상에 위치하도록 한다.
   * Word vectors: one-hot vector
     * The most simple & intuitive representation : 가장 단순하면서 직관적인 representation은 `one-hot vector`이다.
-    
-    
+    * Can make a vector representation, but similarities between words cannot be preserved. -> vector representation를 만들 수 있다는 장점이 있지만, 단어 간의 similarities를 보존할 수 없다는 단점이 있다. ex) motel과 hotel
+  * Word vectors: distributed representation
+    * Word vectors를 분산 표상하기 위해서 parameterized function를 찾기를 원한다.
+    * A parameterized function mapping words in some language to a certain dimensional vectors.
+
+
+* `Neural Network Language Model (NNLM)`
+  * Purpose
+    * Fighting the curse of dimensionality with distributed representations.
+    * one-hot encoding의 curse of dimensionality를 해결하겠다라는 motive에서 purpose함.
+    * Learn simultaneously the word feature vectors and the parameters of that
+probability function
+  * Comparison with Count-based Language Models
+    * 다음 단어가 가장 확률이 높게 나타나도록 임베딩 된 벡터와 뉴럴 네트워크의 weight를 동시에 학습 시키겠다는 것이 NNLM의 목적이다.
+    * 다시 말하면, 전체 문장이나 문서의 시퀀스가 아니라, 단어들이 주어졌을 때 t번째 단어가 생성될 확률이 극대화 되는 함수를 찾는 것이 목적이다.
+  * Two constraints : NNLM의 두 가지 제약 조건
+    * <image src="image/NNLM.png" style="width:500px">
+    * 어떤 조건에서도 이후 단어들이 생성될 확률의 총합은 1이 되어야 한다.
+    * 각 단어가 생성될 확률은 0보다 크거나 같아야 한다.(위 조건 때문에 1보다는 작아야 함.)
+  * Learning NNLM
+    * Lookup table에서 각 단어들의 임베딩을 가져온다. 정해진 윈도우 사이즈만큼의 벡터들이 Input으로 들어간다. 그리고 이 Input을 conditional probability distribution으로 바꿔주고, 다음 나올 단어 w_t가 가장 높은 단어를 계산하게 된다.
+    * ex1) g(준다|너에게, 나의 입술을, 처음으로) = ?
+    * ex2) g(맡긴다|너에게, 나의 입술을, 처음으로) = ?
+    * ex3) g(지운다|너에게, 나의 입술을, 처음으로) = ?
+
+  * <image src="image/NNLM2.png" style="width:500px"> <br>
+    * i : index
+    * w_t-1 ... : 그 이전 n개의 단어
+    * $C(W_{t-1})$ : 임베딩 된 벡터
+    * g : function, i번째 output이 최대가 되도록 하는 neural network를 만든다.
+    * **C being shared across all the words in the context.**
+
+---
+# *※ STEP 6 : Text Representation II Distributed Representations - Part2*
+### 강의 영상 : https://www.youtube.com/watch?v=s2KePv-OxZM&list=PLetSlH8YjIfVzHuSXtG4jAC2zbEAErXWm&index=9&ab_channel=KoreaUnivDSBA
+
+
+### ✓ 2. Distributed Representation: Word2Vec
+
+* NNLM과 Word2Vec의 차이
+  * 순차적으로 단어가 주어졌을 때 다음에 올 단어를 예측하는 Neural Network를 만드는 것이 `NNLM`이였으면, Word2Vec은 주변 단어를 통해서 단어를 예측(`CBOW : Continuous bag-of-words`)하거나 단어를 통해서 주변 단어를 예측하는(`Skip-gram`) 것이다.
+
+* Word2Vec의 Two Architectures
+  * Continuous bag-of-words (CBOW) vs. **Skip-gram**
+  * gradient flow관점에서 보면 skip-gram이 성능이 더 좋다. 즉, graidient를 계산할 때 많은 단어들에 영향을 받아서 업데이트하기 떄문에 skip-gram이 성능이 더 좋다.
+
+
+* Learning representations: `Skip-gram`
+  * activation function이 없는 구조이고 linear한 간단한 구조이다.
+  * Objective function
+    * Maximize `the log probability of any context` word given the current center word : k번째 단어가 주어졌을 때 이 단어 앞뒤로 주어지는 단어들(양쪽 m개)의 생성확률을 높이는 것이다.
+
+* Learning strategy
+  * Do not use all nearby words, but one per each training
+    * 모든 nearby words가 아닌, pairwise하게 하나씩 training 해라.
+    * 한꺼번에 하나, 개별적으로 해서 더하나 동일하기 때문이다.
+  * The number of weights to be trained: 2 x V x N (Huge network!)
+    * 아래와 같은 가이드라인(전략)을 제시했다.
+    * `Word pairs and phrases` : Word pairs나 phrases들은 하나의 단어로 취급해라.
+    * `Subsampling frequent words` : 많이 나타나는 단어들은 subsampling해라. 즉, 많이 나타나는 단어들은 학습을 적게, 덜 시켜서 학습이 좀 더 빠르게 되도록 한다.
+    * `Negative sampling`
+      * Instead of updating the weights associated with all output words, update the weight of a few (5-20) words
+      * Output 단어의 확률을 계산하기 위해서는 모든 단어들에 대한 소프트맥스를 계산해야 하는데 너무 시간이 오래걸리고 불필요하기 때문에, 일부분의 단어들을 sampling해서 분모를 계산하는 것이 `Negative Sampling`이다. Sampling하는 size는 기본으로 사용하는 vocabulary size보다 작다.(**계산의 효율성 추구**)
 
 
 
 
 
-
-    
 
 
 
