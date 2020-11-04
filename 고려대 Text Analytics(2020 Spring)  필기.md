@@ -284,3 +284,92 @@ preserved.
   * Word Weighting
   * N-Grams
 
+## 1. Bag of Words
+* Bag-of-words: Term-Document Matrix
+  * Binary representation : 몇번 등장했냐가 아니라 등장했냐 안했냐를 binary로 Check 
+  * Frequency representation : 몇번 등장한지 빈도를 Check
+
+* Bag of words Representation in a Vector Space
+  * Vector representation does not consider the ordering of words in a document
+    * 순서 고려 x
+    * John is quicker than Mary = Mary is quicker than John in BOW representation
+  * We cannot reconstruct the original text based on the term-document matrix
+    * term-document matrix를 통해서 original text를 reconstruct를 할 수 없다.(반대로는 가능함.)
+* Stop Words
+  * What are stop words?
+    * Words that `do not carry any information`.
+    * Stop Words를 제거하여 불필요한 단어를 제거한다.
+      * SMART stop words list, MySQL Stop words list 같은 것들이 있음.
+
+## 2. Word Weighting
+특정한 단어가 특정한 문서에 대해서 얼마만큼 중요한지 판단하는 것은 가중치 부여 측면에서 살펴보면 된다.
+
+* Word Weighting: Term-Frequency (TF)
+  * Term frequency $tf_{t,d}$
+    * t는 term, d는 document이다.
+    * term이 개별 document에서 얼만큼 나왔는지를 count. 해당 term이 특정 document에서 얼마만큼 중요한지를 나타낼 수 있다고 함.
+
+* Word Weighting: Document Frequency (DF)
+  * Document Frequency $df_t$
+    * The number of documents in which the term t appears.
+    * t라는 term이 전체 corpus 중에서 몇 개의 문서에서 등장했는지. 
+    * 빈번하게 등장하지 않는 단어가 일반적인 단어들보다는 특정 문서의 중요도가 높을 가능성이 높다라는 얘기다.
+    * We should give a high weight for `rare terms` <U>than common terms</U>
+
+* Word Weighting: Inverse Document Frequency (IDF)
+  * Inverse document frequency $idf_t$
+  * $idf_t = log_{10}(N/df_t)$ : N은 Corpus에서의 문서의 개수, df_t는 해당하는 텀의 document frequency이다.
+
+* Word Weighting: `TF-IDF`
+  * TF는 커야하고, IDF는 낮아야 한다.
+  * TF-IDF weight of a term is the product of its tf weight and its idf weight
+  * <image src="image/TF-IDF.png" style="width:500px">
+  * 해당 Term이 특정 document에 얼마나 중요하냐는 질문에 대한 정량적인 대답이다.
+  * Best known weighting scheme in information retrieval
+  * Increases with `the number of occurrences within a document`
+  * Increases with `the rarity of the term in the collection`
+  * 단점 : **Very high dimensional & Sparseness**
+
+* The most commonly used TF-IDF in general
+  * <image src="image/TF-IDF2.png" style="width:500px">
+
+## 3. N-Grams
+
+* N-Gram-based Language Models in NLP
+  * <image src="image/n-gram.png" style="width:500px">
+
+
+---
+# *※ STEP 5 : Text Representation II Distributed Representations *
+### 강의 영상 : https://www.youtube.com/watch?v=bvSHJG-Fz3Y&list=PLetSlH8YjIfVzHuSXtG4jAC2zbEAErXWm&index=8&ab_channel=KoreaUnivDSBA
+
+Lecture 5: Text Representation II Distributed Representations
+
+* INDEX
+  * Word-level : NNLM
+  * Word-level : Word2Vec
+  * Word-level : GloVe
+  * Word-level : Fasttext
+  * Sentence/Paragraph/Document-level
+  * More Things to Embed?
+
+### ✓ Distributed Representation: Word Embedding
+
+* Word Embedding
+  * The purpose of word embedding is `to map the words in a language into a vector space` so that <U>semantically similar words are located close to each other</U>.
+  * 단어를 특정한 vector space로 매핑시키는 것인데, 의미적으로 유사한 단어는 서로 가까운 공간상에 위치하도록 한다.
+  * Word vectors: one-hot vector
+    * The most simple & intuitive representation : 가장 단순하면서 직관적인 representation은 `one-hot vector`이다.
+    
+    
+
+
+
+
+
+
+    
+
+
+
+

@@ -20,12 +20,12 @@
 * 문장을 숫자로 표현하는 방법 중 하나.
 * Sentence similarity : 문장의 유사도를 구할 수 있음.
 * 머신러닝 모델의 입력 값으로 사용할 수 있다.(문자를 숫자형으로 바꿔주어서 입력값으로 사용 가능하다)
-* 한계(Limitation)
+* **한계(Limitation)**
     * `Sparsity` : If we use all English words for bag of words, the vector will be very long, but very few non zeros.
         * 실제 문장 하나를 표현할 때 0이 무수히 많기 때문에 계산량이 높으며 메모리도 많이 사용한다.
-    * Frequent words has more power : 많이 출현한 단어는 힘이 세진다. 
-    * Ignoring word orders : 단어의 순서를 철처히 무시한다. 단어의 출현 순서를 무시하기 때문에 문맥이 무시된다. 예시로 home run vs run home 같은 것으로 인식함.
-    * Out of vocabulary : 보지 못한 단어들은 처리하지 못한다.
+    * `Frequent words has more power` : 많이 출현한 단어는 힘이 세진다. 
+    * `Ignoring word orders` : 단어의 순서를 철처히 무시한다. 단어의 출현 순서를 무시하기 때문에 문맥이 무시된다. 예시로 home run vs run home 같은 것으로 인식함.
+    * `Out of vocabulary` : 보지 못한 단어들은 처리하지 못한다.
 
 #### 2. n-그램(n-gram)
 * n-그램은 연속적으로 n개의 토큰으로 구성된 것을 의미함. 토큰은 자연어 처리에서 보통 단어나 캐릭터로 얘기함.
