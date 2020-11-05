@@ -1,3 +1,5 @@
+※ 고려대학교 강필성 교수님의 유튜브 강의 영상으로 공부하면서 필기한 자료입니다.
+
 # *※ STEP 01-2 : Introduction to Text Analytics: Part2*
 ### 강의 영상 : https://www.youtube.com/watch?v=Y0zrFVZqnl4&list=PLetSlH8YjIfVzHuSXtG4jAC2zbEAErXWm&index=3&ab_channel=KoreaUnivDSBA
 
@@ -351,7 +353,7 @@ preserved.
   * Sentence/Paragraph/Document-level
   * More Things to Embed?
 
-### ✓ 1. Distributed Representation: Word Embedding
+### ✓ 1. Word-level : Word Embedding
 
 * Word Embedding
   * The purpose of word embedding is `to map the words in a language into a vector space` so that <U>semantically similar words are located close to each other</U>.
@@ -395,7 +397,7 @@ probability function
 ### 강의 영상 : https://www.youtube.com/watch?v=s2KePv-OxZM&list=PLetSlH8YjIfVzHuSXtG4jAC2zbEAErXWm&index=9&ab_channel=KoreaUnivDSBA
 
 
-### ✓ 2. Distributed Representation: Word2Vec
+### ✓ 2. Word-level : Word2Vec
 
 * NNLM과 Word2Vec의 차이
   * 순차적으로 단어가 주어졌을 때 다음에 올 단어를 예측하는 Neural Network를 만드는 것이 `NNLM`이였으면, Word2Vec은 주변 단어를 통해서 단어를 예측(`CBOW : Continuous bag-of-words`)하거나 단어를 통해서 주변 단어를 예측하는(`Skip-gram`) 것이다.
@@ -422,11 +424,95 @@ probability function
       * Instead of updating the weights associated with all output words, update the weight of a few (5-20) words
       * Output 단어의 확률을 계산하기 위해서는 모든 단어들에 대한 소프트맥스를 계산해야 하는데 너무 시간이 오래걸리고 불필요하기 때문에, 일부분의 단어들을 sampling해서 분모를 계산하는 것이 `Negative Sampling`이다. Sampling하는 size는 기본으로 사용하는 vocabulary size보다 작다.(**계산의 효율성 추구**)
 
+---
+# *※ STEP 7 : Text Representation II Distributed Representations - Part3*
+### 강의 영상 : https://www.youtube.com/watch?v=JZI74rrMb_M&list=PLetSlH8YjIfVzHuSXtG4jAC2zbEAErXWm&index=10&ab_channel=KoreaUnivDSBA
+
+### ✓ 3. Word-level : GloVe (2014)
+
+* Word2Vec 한계점을 지적하면서 나옴.
+* Limitations of Word2Vec
+  * The network spends so much time to train some overwhelmingly used words
+  * -> 동일한 단어에 대해서 학습을 해서 시간이 많이 걸린다.
+
+* GloVe는 Skip-gram과는 달리 matrix factorization에 기반한 방법론이다.
+
+* Notation
+  * <image src="image/glove.png" style="width:500px"> <br>
+  * $X$ : 동시 발생 행렬(V x V 이므로 굉장히 큼)
+  * X_ij : i 단어와 j 단어가 함께 등장한 빈도
+  * X_i : 단어 i가 corpus에서 등장한 전체 횟수
+  * P_ij = P(j|i) : i가 등장했을 때 j가 함께 등장할 조건부 확률
+
+* Motivation
+  * <image src="image/glove2.png" style="width:500px"> <br>
+  * 특정한 k라는 단어가 ice에는 연관성이 높고 steam에는 연관성이 낮을때, A/B는 커야한다.
+  * 특정한 k라는 단어가 ice에는 연관성이 낮고 steam에는 연관성이 높을때, A/B는 작아야 한다.
+  * 즉, 단어 k가 분자랑 관련도가 높으면 A/B는 커져야하고 분모랑 관련도가 높으면 A/B는 작아져야하며, 마지막으로 분자, 분모 둘 다 관련이 없는 단어일 때는 1에 가까워져야 한다는 것이 Motivation이다. 
+
+* Formulation : base + 2개의 변형 formular
+  * <image src="image/glove3.png" style="width:500px"> <br>
+  * 맨 위 base formular와 아래 2개의 변형 formular
+
+* Homomorphism
+  * Inverse element of addition
+  * Inverse element for multiplication
+  * 덧셈에 대한 항등원($(\mathbb{R},+)$)이 곱셈에 대한 항등원($(\mathbb{R}_{>0},\times)$)으로 표시가 되어야 한다.
+  * 함수의 인자에 대한 실수 공간 상에서의 덧셈 항등원의 관계는 output 출력 공간 상에서는 곱셈에 대한 항등원으로 매핑되어야 한다는 것이 `Homomorphism`이다.
+  * 이러한 것들을 만족하는 가장 쉬운 함수는 지수함수이다. 따라서 여기서 지수함수를 사용함.
+  * F(x)=exp(x)
+
+* Objective Function
+  * <image src="image/glove4.png" style="width:500px"> <br>
+  * 단조증가하다가 $x_{max}$를 넘어가면 f(x)값이 증가하지 않는다.
+  * 이를 통해 너무 많이 발생하는 고 발생빈도 조합들에 대해서는 가중치, 중요도를 낮춰주는 역할을 수행한다.
+
+* Results
+  * 벡터의 크기와 방향이 보전이 된다.
+ 
+### ✓ 4. Word-level : FastText (2016)
+
+* Limitations of NNLM, Word2Vec, and GloVe
+  * NNLM, Word2Vec, and GloVe 들은 단어가 가지고 있는 `morphology`를 무시하고 있다.
+  * Ignores the morphology or words by assigning a distinct vector to each word
+  * Difficult to apply to **morphologically rich languages** with large vocabularies and many rare words (Turkish or Finnish)
+  * => morphologically rich languages(형태소 변화가 굉장히 다양한 언어들)에 대해서는 이것들을 적용하기 어렵다고 한다.
+
+* Goal
+  * ✓ Learn representations for character n-grams 
+  * ✓ Represent words as the sum of n-gram vectors
+
+* Revisit Negative Sampling in Word2Ve
+  * Score is just a dot product between the two embeddings
+  * => `FastText`가 주목하는 것은 두 임베딩 사이의 dot product를 계산하는 것이다. 
+
+* **Subword model**
+  * <image src="image/fasttext.png" style="width:500px"> <br>
+    * w단어에 해당하는 n-gram을 먼저 define한 다음에, 그 n-grams에 대해서 두 단어(w,c) 사이의 score를 계산한다. 즉, 각 n-grams에 대한 벡터 representation들의 합을 뜻한다.
+    * `sum of the vector representations of its n-grams`
+    * 핵심 : 예시로, apple이 있을 때 [a, ap, app, appl, apple] 모두 각각 임베딩해서 전부 더한 것이 실제 apple이라는 단어의 임베딩이다 라는 아이디어이다.
+
+---
+# *※ STEP 8 : Text Representation II Distributed Representations - Part4*
+### 강의 영상 : https://www.youtube.com/watch?v=oRz6llDhFW8&list=PLetSlH8YjIfVzHuSXtG4jAC2zbEAErXWm&index=11&ab_channel=KoreaUnivDSBA
 
 
+### ✓ Sentence/Paragraph/Document-level
 
+#### Document Embedding
+* Paragraph Vector model: Distributed Memory (**PV-DM**) model
+  * 각 paragraph마다 id를 가지고 있고, Input으로 함께 단어가 들어간다. 이를 통해 다음번 시퀀스에 무슨 단어가 무엇이 올지 예측하는 것이 `PV-DM Model`이다.
+  * context 워드와 다음에 올 단어는 바뀌지만, 같은 paragraph에서는 paragraph id(paragraph index vector)는 동일하다.
 
+* Paragraph Vector model: Distributed Bag of Words (**PV-DBOW**)
+  * Input 자체는 paragraph id 하나만 들어오고 그 paragraph에 존재할 단어들을 예측하는 것이다.
+  * Ignore the context words in the input, and `force the model to predict words randomly sampled from the paragraph in the output`
+  * *순서 상관없이* paragraph 안에 있을 단어만 예측하면 된다.
+  * PV-DM alone usually works well for most tasks, but the combination of PV-DM and PV-DBOW are recommended
+  * => PV-DM 만 가지고도 대부분의 Task에서는 잘 작동하는데, 가능하면 두 가지를 다 사용하면 좋다.
 
-
+### ✓ More Things to Embed?
+* Q. 어떻게 하면 가변 길이의 Syscall Trace를 고정 길이의 벡터로 변환할 수 있을까?
+  * => Sequence Embedding의 목적
 
 
