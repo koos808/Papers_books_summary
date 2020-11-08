@@ -89,6 +89,10 @@ Papers & Books Summary Repository
 
     * 장단점
         * 이러한 이유로 이전 학습의 결과가 다음학습에 영향을 주게 되고 부스팅 라운드를 진행할수록 m차원 공간의 분류경계선(Borderline)상의 데이터의 가중치가 증가하게 되는 결과를 가져오게 됩니다. 일반적으로 부스팅 알고리즘은 의사결정나무(Decision Tree)모형을 주로 사용하는 것으로 알려져 있고 과적합(Over fitting)에 강한 장점을 갖고 있습니다. 하지만 다른 앙상블 모형과 마찬가지로 분류결과에 대한 해석이 불가능하다는 단점을 갖고 있습니다.
+
+* 엔트로피(Entropy)와 크로스 엔트로피(Cross-Entropy)의 쉬운 개념 설명
+  * http://melonicedlatte.com/machinelearning/2019/12/20/204900.html
+  * 위 링크 설명 매우 잘되어 있음.
 </br>
 
 
