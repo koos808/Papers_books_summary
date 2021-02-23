@@ -87,6 +87,11 @@ Papers & Books Summary Repository
     * Embedding 같은 개념으로 처리
     * Word2Vec은 단어들의 유사할수록 가깝게 위치하게 되는데 Cat2Vec 역시 원래의 차원보다 더 낮은 차원으로 차원축소를 진행하면서 Sparse함을 없앨 수 있다. 
 
+* 불균형 데이터(Imbalanced data) 처리 방법
+  * `class weight` 옵션을 이용해 특정 class의 weight 업데이트 양 늘려주기
+  * oversampling : ex) Smote를 이용해 Data preprocess 
+  * undersampling : class가 2개 있는데 데이터가 충분히 많은 상태에서 불균형하다 하면 undersampling 하기.
+  * Reinforcement Learning 사용 : ex) `Using Deep Q-Learning in the Classification of an Imbalanced Dataset`
 
 *※ 여러가지 용어*
 ===
