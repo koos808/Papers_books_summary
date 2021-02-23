@@ -91,6 +91,7 @@ Papers & Books Summary Repository
   * `class weight` 옵션을 이용해 특정 class의 weight 업데이트 양 늘려주기
   * oversampling : ex) Smote를 이용해 Data preprocess 
   * undersampling : class가 2개 있는데 데이터가 충분히 많은 상태에서 불균형하다 하면 undersampling 하기.
+  * Loss 변경 : ex) `Focal Loss`
   * Reinforcement Learning 사용 : ex) `Using Deep Q-Learning in the Classification of an Imbalanced Dataset`
 
 *※ 여러가지 용어*
