@@ -76,8 +76,17 @@ Papers & Books Summary Repository
 
 
 <br><br>
+
 * **딥러닝(Deep Learning)** 과 **머신러닝(Merchine Lerning)**, **인공지능(AI)** 의 구별법
-    * 
+
+* Categorical Variables & Vector 처리 방법
+  * 1) Dummy variable(가변수)로 변경 후 사용 : One-hot Encoding
+  * 2) Feature hashing (a.k.a the hashing trick)
+  * 3) Encoding to ordinal variables
+  * 4) Cat2Vec -> Categorical to Vector `Cat2Vec` 파이썬 라이브러리 사용
+    * Embedding 같은 개념으로 처리
+    * Word2Vec은 단어들의 유사할수록 가깝게 위치하게 되는데 Cat2Vec 역시 원래의 차원보다 더 낮은 차원으로 차원축소를 진행하면서 Sparse함을 없앨 수 있다. 
+
 
 *※ 여러가지 용어*
 ===
