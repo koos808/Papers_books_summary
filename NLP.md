@@ -149,6 +149,16 @@
 
 #### 11. Sequence to Sequence with Attention Model
 * 영상 참고
+* `Seq2Seq` : 3분 딥러닝 파이토치맛
+  * Seq2Seq 모델은 시퀀스를 입력받아 또 다른 시퀀스를 출력함.
+  * 한마디로 문장을 다른 문장으로 번역해주는 모델이다.
+  * 병렬 말뭉치(`parallel corpora`)라고 하는 원문과 번역문이 쌍을 이루는 형태의 많은 텍스트 데이터가 필요함.
+
+  * Seq2Seq 모델은 각자 다른 역할을 하는 두개의 RNN(encoder, decoder)을 이어붙인 모델이다.
+    * **Encoder** : 원문 내용을 학습하는 RNN. 원문 속 모든 단어로 하나의 고정 크기 텐서를 생성(=`문맥 벡터::context vector`)함. 원문 마지막 토큰에 해당하는 hidden vector는 원문의 뜻을 모두 내포하고 있는 context vector이다.
+      * Autoencoder는 정적인 데이터에서 정보를 추려 차원 수를 줄이고, 축약된 데이터는 원본 데이터의 중요한 내용들만 내포하고 있다. Seq2Seq 모델의 RNN 인코더는 동적인 시계열 데이터를 간단한 형태의 정적인 데이터로 축약한다. 즉, RNN 인코더를 거쳐 만들어진 context vector는 시계열 데이터를 압축한 데이터이다.
+    * **Decoder** : encoder에게서 context vector를 이어받아 번역문 속의 토큰을 차례대로 예상한다.
+    * decoder가 예상해낸 모든 토큰과 실제 번역문 사이의 오차를 줄여나가는 것이 Seq2Seq 모델이 학습하는 기본 원리이다.
 
 #### 12.Transformer(Attention is all you need)
 * 영상 참고
