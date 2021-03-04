@@ -163,37 +163,100 @@
 #### 12.Transformer(Attention is all you need)
 * 영상 참고
 
+* RNN 문제점
+  * rnn의 context vector가 고정된 크기라서 책과 같은 긴 입력 문장의 경우에는 고정된 context vector에 모든 정보를 저장하기 힘들어서 예측이 잘 안될 가능성이 있었다.
+
+* rnn 장점
+  * rnn은 단어의 위치와 순서 정보를 잘 활용한다.
+
+* RNN based encoder decoder with attention
+  * 고정된 context bector를 사용하지 않고 encoder의 모든 상태 값을 활용한다는 장점이 있다.
+  * 동적으로 encoder를 활용하기 때문에 긴 문장의 번역 성능이 이전 encoder decoder 보다 더욱 나아졌다.
+
 1. Transformer는 기존 encoder decoder architecture를 발전시킨 모델이다.
-2. RNN을 사용하지 않는다.
+2. RNN을 사용하지 않는다.(RNN을 encoder decoder에서 성공적으로 제거했다.)
 3. RNN 기반 모델보다 학습이 빠르고 성능이 좋다.(Faster, Better!)
 
 * How faster?
     * Reduced sequence computation
     * Parallelization(병렬)
 
-`※ Encoder`
+* rnn 대비 transformer의 장점
+  * **병렬처리** : rnn을 사용하면 단어들을 순차적으로 계산했어야 했는데, 순차적이 아닌 병렬적으로 처리한다는 점이 가장 큰 장점이다.
+
+**`※ Encoder`**
 
 기존 인코더, 디코더의 주요 컨셉을 간직하되 RNN을 없애서 학습 시간을 단축시켰으며 성능도 올렸다.
 
-* Positional encoding
+* **Positional encoding**
     * 단어의 위치와 순서 정보를 활용하기 때문에 rnn을 사용했는데 rnn을 제거 했기 때문에 Positional encoding을 사용한다.
     * Positional encoding이란 인코더 및 디코더 입력값마다 상대적인 위치정보를 더해주는 기술이다.
+    * Research paper에서는 sine, cos function를 활용해 positional encoding을 사용함.
     * 장점 1 : 항상 Positional encoding의 값은 -1~1 사이의 값이다.
     * 장점 2 : 학습 데이터 중 가장 긴 문장보다도 긴 문장이 운영 중 들어왔을 때 에러없이 상대적인 인코딩 값을 줄 수 있다.
+    * 즉 각 단어의 word embedding에 positional encoding을 더해준 뒤, Self Attention 연산을 해준다.
 
-* Self Attention
-    * Quary, key, value => vector의 형태
-    * Quary * key = Attention Score
-        * Score가 높을수록 단어의 연관성이 높고 Score가 낮을수록 연관성이 낮다.
+* **Self Attention**
+    * Quary, key, value => **vector의 형태** 
+    * Quary, key, values는 `W_q, W_k, W_v`에 의해 생성되는데, `W_q, W_k, W_v`는 학습되는 파라메터 행렬이다.
+    * 1) Quary * key = **Attention Score**
+      * Quary와 key는 둘 다 vector이므로 dot product로 곱하면 숫자로 나오게 된다.(ex. 130, 50, 20, 10)
+      * Score가 높을수록 단어의 연관성이 높고 Score가 낮을수록 연관성이 낮다.
+    * 2) 이후 Attention Score 값을 확률개념으로 바꿔주기 위해 softmax값으로 변환해 준다.(ex. 0.92, 0.05, 0.02, 0.01) 
+      * = softmax( score/ sqrt( dimension of key )) => 이는 key vector의 차원이 늘어날 수록 dot product 계산시 값이 증대되는 문제를 보완하기 위해서 score를 key의 차원의 루트로 나누어 주게 된다.
+    * 3) Softmax * Value(vector 형태) => vector 형태
+    * 4) $\sum Softmax*Value$ = Attention Layer output : 최종 벡터는 단순한 단어가 아닌, 문장 속에서의 해당 단어가 지닌 전체적인 의미를 지닌 단어로 간주하게 된다.
+
+* Multi Head Attention
+  * 병렬처리된 Attention layer를 Multi Head Attention이라 부른다.
+  * 한개의 Attention으로 모호한 정보를 충분히 Encoding하기 어렵기 때문에, Multi Head Attention을 사용해서 되도록 연관된 정보를 다른 관점에서 수집해서 보완한다.
+
+* Encoder의 전반적인 구조
+  * <image src="image/Transformer_encoder.png" style = "width:500px">
+  * 1) 단어를 word embedding으로 변환한다.
+  * 2) positional encoding을 적용한다.
+  * 3) Multi Head Attention에 입력한다. 그렇게 나온 값들을 이어 붙혀서 또다른 행렬과 곱해져 최초 word embedding과 동일한 차원을 갖는 vector로 출력된다.
+  * 4) 각 vector는 각각의 fully connected layer로 들어가서 입력과 동일한 size의 vector로 출력된다.
+  * 5) 출력 vector 차원의 크기가 입력 vector와 동일하다.
+
 * Residual Connection followed by layer normalization
+  * <image src="image/Transformer_Residual_Connection.png" style = "width:500px">
+  * word embedding에 positional encoding을 더해주는데, 딥러닝 모델을 학습하다 보면 기울기 손실 문제가 발생할 수 있다. 따라서 이를 보완하기 위해 Residual Connection으로 입력된 값을 다시 한번 더해준다. 그 이후 layer normalization을 해주어 학습의 효율을 증진시킨다.
+
 * Encoder Layer에 입력 vector와 출력 vector의 차원의 크기는 동일하다. -> 이는 즉, Encoder Layer를 여러개 붙혀서 사용할 수 있다는 뜻이다. Transformer는 Encoder Layer를 6개 붙혀서 만든 구조다.
+  * <image src="image/Transformer_6encoder.png" style = "width:500px">
+  * 각 encoder layer는 weight를 공유하지 않고 따로 학습한다.
 * Transformer Encoder의 최종 출력 값은 6번째 인코더 레이어의 출력값이다.
 
-`※ Decoder`
-Decoder는 Encoder와 동일하게 6개의 Layer로 구성되어있다. 
+**`※ Decoder`**
+
+* <image src="image/Transformer_decoder.png" style = "width:500px">
+
+  * Decoder는 Encoder와 동일하게 6개의 Layer로 구성되어있다. (Decoder는 Encoder와 유사하게 구성)
+  * 최초 단어부터 끝 단어까지 순차적으로 단어를 출력한다.
+  * The decoder generates one word at a time from left to right. The first word is based on the final representation of the encoder.(디코더는 왼쪽에서 오른쪽으로 한 번에 한 단어를 생성한다. 첫 번째 단어는 인코더의 최종 표현을 기반으로 한다.)
+  * Decoder layers attend previously generated words of the decoder and the final output of the encoder.(디코더 계층은 이전에 생성 된 디코더의 단어와 인코더의 최종 출력에 포함된다.) => Attention 병렬 처리를 적극 활용
+
+* Encoder Layer와 Decoder Layer 구조 비교
+  * Encoder
+    * <image src="image/Transformer_encoder_layer.png" style = "width:500px">
+  * Decoder
+    * <image src="image/Transformer_decoder_layer.png" style = "width:500px">
+
+  * Encoder와 다르게 Decoder의 첫 번째 Multi Head Attention Layer는 **Masked**가 붙는다.(to prevent future words to be part of the attention-> 미래의 단어가 Attention의 일부가 되지 않도록)
+  * Decoder의 두 번째 Multi Head Attention Layer는 Encoder 처럼 Query, Key, Value로 연산을 하지만, 현재 Decoder의 입력값을 Query로 사용하고 Encoder의 최종 출력값을 Key와 Value로 사용한다.(the queries come form the previous decoder layer, and the keys and values come from the output of the encoder)
+  * 좀 더 자세히 설명하자면 Decoder의 현재 상태를 Query로 Encoder에 질문하고, encoder 출력값에서 중요한 정보인 Key와 Value를 획득한 후 Decoder 다음 단어에 가장 적합한 단어를 출력하는 과정이다.
+  * 이후는 Encoder와 마찬가지로 Feed Forward Layer를 통해 최종 값을 Vector로 출력한다.
+  * 마지막 단계에는 Vector를 실제 단어로 바꿔주기 위해 Linear Layer(Generate logit for softmax)와 Softmax Layer를 거치게 된다.
+
+**`※ Label Smoothing`**
+* 최종 단계에서 Label Smoothing을 사용한다. 이는 -one hot encoding이 아님.
+* Label Smoothing helped improving BLEU score and accuracy
+* Label Smoothing은 0 또는 1이 아닌, 정답이 1에 가까운 값, 오답은 0에 가까운 값으로 변형시켜서 모델 학습시 모델이 학습 데이터에 치중되어 학습 효율이 떨어지는 것을 방지하는 것이다.
+* Label Smoothing이 언제 도움되냐 : Label이 noise한 경우(같은 입력값인데 출력을 다르게 하는 경우)
+* softmax의 출력값과 label의 차이를 줄이는 것인데, one-hot encoding으로 되어있다면 학습이 원할하지가 않을 것이기 때문이다.
 
 
-* Label Smoothing -one hot encoding이 아님.
 
 ---
 ### Question
