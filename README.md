@@ -93,6 +93,9 @@ Papers & Books Summary Repository
   * undersampling : class가 2개 있는데 데이터가 충분히 많은 상태에서 불균형하다 하면 undersampling 하기.
   * Loss 변경 : ex) `Focal Loss`
   * Reinforcement Learning 사용 : ex) `Using Deep Q-Learning in the Classification of an Imbalanced Dataset`
+  * keras-balanced-batch-generator 사용
+    * 배치마다 class를 동일한 비율로 바꿔주는 generator
+    * 코드 github : https://github.com/soroushj/keras-balanced-batch-generator
 
 *※ 여러가지 용어*
 ===
