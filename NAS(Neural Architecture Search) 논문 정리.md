@@ -107,5 +107,3 @@
   * 목적 : CIFAR-10에서 목표는 좋은 컨볼루션 아키텍처를 찾는 반면 Penn Treebank에서 목표는 좋은 recurrent cell을 찾는 것이다.
   * 분산 학습을 위해 800개의 GPU를 사용 (S:20, K:100, m:8).
   * Search space : 비선형 함수로 Relu를 사용하며 각 레이어마다 batch normalization과 skip connection이 존재한다. 모든 convolutional 레이어에 대해, RNN controller는 filter의 height[1, 3, 5, 7]과 width[1, 3, 5, 7], 그리고 필터의 수[24, 36, 48, 64]를 선택한다. stride에 대해서는 두 가지의 실험을 하는데, 한 가지는 1로 고정시킨 것이며, 다른 건 controller가 [1, 2, 3]의 값 중 하나를 선택하게 하는 것이다.
-
-
