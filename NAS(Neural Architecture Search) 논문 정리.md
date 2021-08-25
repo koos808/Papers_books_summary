@@ -1,3 +1,14 @@
+# 0. Nas Map
+
+<U>NAS 공부를 위한 논문 순서와 참고 블로그 정리</U>
+
+1. NASRL : Neural Architecture Search with Reinforcement Learning, Barret Zoph et al., 2016
+2. NASNet : NasNet, Learning Transferable Architectures for Scalabel Image Recognition
+3. ENAS : Efficient Neural Architecture Search via Parameter Sharing
+  * https://jayhey.github.io/deep%20learning/2018/03/15/ENAS/
+3. 
+
+
 1.Neural Architecture Search with Reinforcement Learning, Barret Zoph et al., 2016
 ===
 
