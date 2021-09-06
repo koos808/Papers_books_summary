@@ -149,6 +149,11 @@
 4.MnasNet: Platform-Aware Neural Architecture Search for Mobile
 ===
 
+* 간단 요약
+  * 모바일 플랫폼에서 사용 가능한 NAS를 찾는 것이 목표이기 때문에, 기존의 validation accuracy를 objective function으로 최적화하는 것이 아닌, 정확도를 조금 낮추더라도 가벼운 네트워크를 만드는 것에 초점을 맞춘 논문이다.
+  * validation accuracy와 latency(inference spped)를 Reward로 사용하여 최적화함.
+  * latency constraint를 soft하게 걸어줌으로써 Pareto optimal을 얻는다.
+
 
 
 
