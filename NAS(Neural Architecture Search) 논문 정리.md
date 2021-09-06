@@ -4,14 +4,24 @@
 
 * **개인적인 공부를 위한 자료입니다.**
 * 참고 사이트
+  * https://github.com/D-X-Y/Awesome-AutoDL
   * http://khanrc.github.io/nas-1-intro.html
 
 * 논문 읽는 순서 및 참고 사이트 정리
-  1. NASRL : Neural Architecture Search with Reinforcement Learning, Barret Zoph et al., 2016
-  2. NASNet : NasNet, Learning Transferable Architectures for Scalabel Image Recognition
-  3. ENAS : Efficient Neural Architecture Search via Parameter Sharing
+* RL Part
+  * 1.NASRL : Neural Architecture Search with Reinforcement Learning, Barret Zoph et al., 2016
+  * 2.NASNet : NasNet, Learning Transferable Architectures for Scalabel Image Recognition
+  * 3.ENAS : Efficient Neural Architecture Search via Parameter Sharing
     * https://jayhey.github.io/deep%20learning/2018/03/15/ENAS/
-  4. MnasNet: Platform-Aware Neural Architecture Search for Mobile
+  * 4.MnasNet: Platform-Aware Neural Architecture Search for Mobile
+* Evolutionary Algorithms Part
+  * 5.AmeobaNet : Regularized Evolution for Image Classifier Architecture Search
+* Bayesian optimization (BO)
+  * 6.AutoKeras. Jin, Haifeng, Qingquan Song, and Xia Hu. “Efficient neural architecture search with network morphism.” arXiv preprint arXiv:1806.10282 (2018).
+* Sequential model-based optimization (SMBO)
+  * 7.PNAS. Liu, Chenxi, et al. “Progressive neural architecture search.” arXiv preprint arXiv:1712.00559 (2017).
+* Gradient descent (GD)
+  * 8.DARTS. Liu, Hanxiao, Karen Simonyan, and Yiming Yang. “Darts: Differentiable architecture search.” arXiv preprint arXiv:1806.09055 (2018).
 
 
 1.Neural Architecture Search with Reinforcement Learning, Barret Zoph et al., 2016
@@ -124,7 +134,7 @@
   * 분산 학습을 위해 800개의 GPU를 사용 (S:20, K:100, m:8).
   * Search space : 비선형 함수로 Relu를 사용하며 각 레이어마다 batch normalization과 skip connection이 존재한다. 모든 convolutional 레이어에 대해, RNN controller는 filter의 height[1, 3, 5, 7]과 width[1, 3, 5, 7], 그리고 필터의 수[24, 36, 48, 64]를 선택한다. stride에 대해서는 두 가지의 실험을 하는데, 한 가지는 1로 고정시킨 것이며, 다른 건 controller가 [1, 2, 3]의 값 중 하나를 선택하게 하는 것이다.
 
-
+<br>
 
 2.NasNet: Learning Transferable Architectures for Scalabel Image Recognition
 ===
@@ -136,6 +146,9 @@
   *  RNN은 `2`(normal cell, reduction cell) X `5`(논문에서 conv block 5개로 사용)
      *  RNN은 2x5B의 softmax prediction을 하며, B는 cell을 구성하는 convolution block의 개수 의미함.
 
+<br>
+
+
 3.ENAS : Efficient Neural Architecture Search via Parameter Sharing
 ===
 
@@ -146,6 +159,8 @@
   * 이전 논문들은 RNN controller가 mini-batch 단위로 네트워크 구조를 생성하고 그 구조들을 전부 학습한 뒤에 업데이트했는데, ENAS에서는 RNN controller가 생성한 네트워크 구조들을 1-step씩만 학습시켜 성능 비교 및 제일 좋은 구조 하나만 학습함.
   * search space를 엄청 줄임.
 
+<br>
+
 4.MnasNet: Platform-Aware Neural Architecture Search for Mobile
 ===
 
@@ -153,10 +168,31 @@
   * 모바일 플랫폼에서 사용 가능한 NAS를 찾는 것이 목표이기 때문에, 기존의 validation accuracy를 objective function으로 최적화하는 것이 아닌, 정확도를 조금 낮추더라도 가벼운 네트워크를 만드는 것에 초점을 맞춘 논문이다.
   * validation accuracy와 latency(inference spped)를 Reward로 사용하여 최적화함.
   * latency constraint를 soft하게 걸어줌으로써 Pareto optimal을 얻는다.
+  * search space도 새롭게 제안했으며 모든 셀의 구조를 다르게 가져간다. 각 셀은 연산 하나로 정의되며 동일한 연산을 여러개 스택해서 하나의 셀로 구성한다.
+    * search space에 관한 정의나 비교 실험 등이 논문에서 빠져있음.
 
+<br>
 
+Evolutionary Algorithms(EA) Part
+===
 
+* Population에서 랜덤 샘플링을 한 뒤 좋은 모델은 mutation을 거치게 되며 새롭게 population에 추가되고, 안 좋은 모델은 제거된다.
 
+<br>
+
+5.AmeobaNet : Regularized Evolution for Image Classifier Architecture Search
+===
+
+* 간단 요약
+  * 안 좋은 모델을 제거하는 것이 아닌 oldest를 제거하는 Regularized Evoluion(RE)을 제안함
+  * 
+
+<br>
+
+Bayesian Optimization Part
+===
+
+* Population에서 랜덤 샘플링을 한 뒤 좋은 모델은 mutation을 거치게 되며 새롭게 population에 추가되고, 안 좋은 모델은 제거된다.
 
 
 
