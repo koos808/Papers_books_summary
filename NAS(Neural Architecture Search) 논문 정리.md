@@ -2,11 +2,16 @@
 
 <U>NAS 공부를 위한 논문 순서와 참고 블로그 정리</U>
 
-1. NASRL : Neural Architecture Search with Reinforcement Learning, Barret Zoph et al., 2016
-2. NASNet : NasNet, Learning Transferable Architectures for Scalabel Image Recognition
-3. ENAS : Efficient Neural Architecture Search via Parameter Sharing
-  * https://jayhey.github.io/deep%20learning/2018/03/15/ENAS/
-4. 
+* **개인적인 공부를 위한 자료입니다.**
+* 참고 사이트
+  * http://khanrc.github.io/nas-1-intro.html
+
+* 논문 읽는 순서 및 참고 사이트 정리
+  1. NASRL : Neural Architecture Search with Reinforcement Learning, Barret Zoph et al., 2016
+  2. NASNet : NasNet, Learning Transferable Architectures for Scalabel Image Recognition
+  3. ENAS : Efficient Neural Architecture Search via Parameter Sharing
+    * https://jayhey.github.io/deep%20learning/2018/03/15/ENAS/
+  4. MnasNet: Platform-Aware Neural Architecture Search for Mobile
 
 
 1.Neural Architecture Search with Reinforcement Learning, Barret Zoph et al., 2016
@@ -118,3 +123,42 @@
   * 목적 : CIFAR-10에서 목표는 좋은 컨볼루션 아키텍처를 찾는 반면 Penn Treebank에서 목표는 좋은 recurrent cell을 찾는 것이다.
   * 분산 학습을 위해 800개의 GPU를 사용 (S:20, K:100, m:8).
   * Search space : 비선형 함수로 Relu를 사용하며 각 레이어마다 batch normalization과 skip connection이 존재한다. 모든 convolutional 레이어에 대해, RNN controller는 filter의 height[1, 3, 5, 7]과 width[1, 3, 5, 7], 그리고 필터의 수[24, 36, 48, 64]를 선택한다. stride에 대해서는 두 가지의 실험을 하는데, 한 가지는 1로 고정시킨 것이며, 다른 건 controller가 [1, 2, 3]의 값 중 하나를 선택하게 하는 것이다.
+
+
+
+2.NasNet: Learning Transferable Architectures for Scalabel Image Recognition
+===
+
+* 간단 요약
+  * 전체 네트워크를 search 하는 것이 아닌, 셀 구조를 search해서 stack하는 방식으로 적용.
+  * `Normal cell`과 `Reduction cell`(feature map size 줄이기) 두개를 각각 찾음.
+  *  search space 미리 정의 -> filter size와 stride size 등을 자주 사용하는 것들로 미리 구성하며 skip-connection 또한 2개로 고정
+  *  RNN은 `2`(normal cell, reduction cell) X `5`(논문에서 conv block 5개로 사용)
+     *  RNN은 2x5B의 softmax prediction을 하며, B는 cell을 구성하는 convolution block의 개수 의미함.
+
+3.ENAS : Efficient Neural Architecture Search via Parameter Sharing
+===
+
+* 간단 요약
+  * 이 논문의 가장 큰 Contribution은 `child model들이 weight를 공유하게 만들어서 밑바닥부터 학습하지 않게 하는 것`임. 즉, child model 간 파라미터 공유 뿐만 아니라 좋은 성능까지 유도해서 계산 복잡도와 퍼포먼스 두 개를 동시에 달성한 것.
+  * `Parameter sharing` 아이디어 제안
+    * 위치와 인풋, 연산이 동일하면 서로 parameter를 공유함.
+  * 이전 논문들은 RNN controller가 mini-batch 단위로 네트워크 구조를 생성하고 그 구조들을 전부 학습한 뒤에 업데이트했는데, ENAS에서는 RNN controller가 생성한 네트워크 구조들을 1-step씩만 학습시켜 성능 비교 및 제일 좋은 구조 하나만 학습함.
+  * search space를 엄청 줄임.
+
+4.MnasNet: Platform-Aware Neural Architecture Search for Mobile
+===
+
+
+
+
+
+
+
+
+
+
+
+
+
+
