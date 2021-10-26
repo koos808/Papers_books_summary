@@ -111,6 +111,9 @@ Papers & Books Summary Repository
 * 엔트로피(Entropy)와 크로스 엔트로피(Cross-Entropy)의 쉬운 개념 설명
   * http://melonicedlatte.com/machinelearning/2019/12/20/204900.html
   * 위 링크 설명 매우 잘되어 있음.
+  * 크로스 엔트로피는 실제 분포 
+    * q에 대하여 알지 못하는 상태에서, 모델링을 통하여 구한 분포인 p를 통하여 q 를 예측하는 것입니다. q와 p가 모두 들어가서 크로스 엔트로피라고 한다고 합니다.
+
 </br>
 
 
